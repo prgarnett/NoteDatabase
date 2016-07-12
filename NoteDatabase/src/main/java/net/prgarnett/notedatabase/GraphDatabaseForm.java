@@ -862,57 +862,45 @@ public class GraphDatabaseForm extends javax.swing.JFrame
    */       
     
     
-     private String[][] getAllRelationships()
+    private String[][] getAllRelationships()
     {
-        String queryString = "match (n1)-[r]->(n2) return n1.ID, type(r), n2.ID";  
-                 
-       
-       try ( Transaction tx = graphDb.beginTx();
-            Result result = graphDb.execute( queryString ) )
+        String queryString = "match (n1)-[r]->(n2) return n1.ID, type(r), n2.ID";
+        StatementResult result = session.run( queryString );
+        {
+            String rows = "";
+            while( result.hasNext() )
             {
-                 String rows = "";
-                while ( result.hasNext() )
-            {
-                     Map<String,Object> row = result.next();
-                     for ( Entry<String,Object> column : row.entrySet() )
-                     {
-                            
-                            rows += column.getValue() + "; ";
-        
-                     }
-                   
-             }
-                                 
-                 String[] newOne = rows.split(";");
-                 
-                 for (int j = 0;j<newOne.length;j++)
-                 {
-                     System.out.println(newOne[j]);
-                 }
-                 
-                 int numberOfRels = newOne.length/3;
-                  
-                 String[][] res = new String[numberOfRels][3];
-                 String origName = "";
-
-                 
-                 for (int i = 0;i<numberOfRels; i++)
-                 {
-                     res[i][0] = newOne[3*(i)].trim();//node 1 ID?
-              
-                     res[i][1] = newOne[3*(i)+2].trim();//node 2 ID
-                                    
-                     res[i][2] = newOne[3*(i)+1].trim();// relationship type
-                 
-                 }
-                 
-                tx.success();
-                
-                
-                return res;
-                
+                Record record = result.next();
+                Map<String,Object> row = record.asMap();
+                for ( Entry<String,Object> column : row.entrySet() )
+                {
+                    rows += column.getValue() + "; ";
+                }
             }
-        
+                                 
+            String[] newOne = rows.split(";");
+
+            for (int j = 0;j<newOne.length;j++)
+            {
+                System.out.println(newOne[j]);
+            }
+
+            int numberOfRels = newOne.length/3;
+
+            String[][] res = new String[numberOfRels][3];
+            String origName = "";
+            
+            for (int i = 0;i<numberOfRels; i++)
+            {
+                res[i][0] = newOne[3*(i)].trim();//node 1 ID?
+
+                res[i][1] = newOne[3*(i)+2].trim();//node 2 ID
+
+                res[i][2] = newOne[3*(i)+1].trim();// relationship type
+
+            }
+           return res;
+        }
     }
     
      /**
@@ -923,188 +911,184 @@ public class GraphDatabaseForm extends javax.swing.JFrame
       */
      private void writeHTMLFileForGraphDisplay(String [][] nodes, String[][] rels) throws FileNotFoundException
      {
-          int numberNodes = nodes.length;
+        int numberNodes = nodes.length;
         int numberEdges = rels.length;
         
         String initialText = "<html>\n" +
-                                "<head>\n" +
-                                "<style type=\"text/css\">\n" +
-                                "  #container {\n" +
-                                "    max-width: 400px;\n" +
-                                "    height: 400px;\n" +
-                                "    margin: auto;\n" +
-                                "  }\n" +
-                                "</style>\n" +
-                                "</head>\n" +
-                                "<body>\n" +
-                                "\n" +
-                                "<h1></h1>\n" +
-                                "\n" +
-                                
-                                 "<button onclick=\"stopButtonClicked()\">Stop layout algorithm</button>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/sigma.core.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/conrad.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/utils/sigma.utils.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/utils/sigma.polyfills.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/sigma.settings.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.dispatcher.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.configurable.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.graph.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.camera.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.quad.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.edgequad.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/captors/sigma.captors.mouse.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/captors/sigma.captors.touch.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.canvas.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.webgl.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.svg.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.nodes.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.nodes.fast.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.edges.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.edges.fast.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.edges.arrow.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.labels.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.hovers.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.nodes.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.curve.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.arrow.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.curvedArrow.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.curve.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.arrow.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.curvedArrow.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.extremities.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.utils.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.nodes.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.edges.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.edges.curve.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.labels.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.hovers.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/middlewares/sigma.middlewares.rescale.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/middlewares/sigma.middlewares.copy.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.animation.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.bindEvents.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.bindDOMEvents.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.drawHovers.js\"></script>\n" +
-                                "\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.plugins.animate/sigma.plugins.animate.js\"></script>\n" +
-                                "\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.parsers.json/sigma.parsers.json.min.js\"></script>\n" +
-                                "\n" +
-                                  "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/settings.js\"></script>\n" +
-                                 "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.curve.js\"></script>\n" +
-                                 "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.curvedArrow.js\"></script>\n" +
-                                 "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.def.js\"></script>\n" +
-                                    "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.layout.forceAtlas2/worker.js\"></script>\n" +
-                                    "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.layout.forceAtlas2/supervisor.js\"></script>\n" +
-                                    "\n" +
-                                    "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.plugins.dragNodes/sigma.plugins.dragNodes.js\"></script>\n" +
-                                    "\n" +
-                                    "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.parsers.gexf/gexf-parser.js\"></script>\n" +
-                                    "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.parsers.gexf/sigma.parsers.gexf.js\"></script>\n" +
-                                    "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.plugins.filter/sigma.plugins.filter.js\"></script>" +
-                                "\n" +
-                                "<div id=\"container\">\n" +
-                                "    \n" +
-                                "  <style>\n" +
-                                "    #graph-container {\n" +
-                                "      top: 0;\n" +
-                                "      bottom: 0;\n" +
-                                "      left: 500;\n" +
-                                "      right: 0;\n" +
-                                "      position: absolute;\n" +
-                                "    }\n" +
-                                "  </style>\n" +
-                                "  <div id=\"graph-container\"></div>\n" +
-                                "</div>\n" +
-                                "<script>";
-        
-        
-                  String javaScriptText1 = "    var i,\n" +
-                                "    s,\n" +
-                                "    N = "+numberNodes+",\n" +
-                                "    E = "+numberEdges+",\n" +
-                                "    g = {\n" +
-                                "      nodes: [],\n" +
-                                "      edges: []\n" +
-                                "    };\n" +
-                                "// Generate a graph:\n" ;
-                    
-                  
-                  String javaScriptText2 = "";
-                  for (int i = 0; i<numberNodes; i++)
-                  {
-                      javaScriptText2 = javaScriptText2+ "  g.nodes.push({\n" +
-                                "    id: '"+nodes[i][0]+"',\n" +
-                                "    label: '"+nodes[i][1]+"',\n" +
-                                "    x: Math.random(),\n" +
-                                "    y: Math.random(),\n" +
-                                "    size: 50,\n" +
-                                "    color: '#888'\n" +
-                                "  });\n" ;
-                   }
-                  
-                   String javaScriptText3 = "";
-                   for (int j = 0; j<numberEdges; j++)
-                  {
-                      javaScriptText3 = javaScriptText3 +
-                              "  g.edges.push({\n" +
-                                "    id: 'e' + "+j+",\n" +
-                                "    source:'"+rels[j][0]+"' ,\n" +
-                                "    target:'"+rels[j][1]+"',\n" +
-                              "    label: '"+rels[j][2]+"',\n" +
-                              "    color: '#c6583e',\n" +
-                              "    size: 4,\n"+
-                              "    hover_color: '#000'\n" +
-                                "  });\n";
-                              
-                             
-                  }
-                             
-                    javaScriptText3 = javaScriptText3 + "s = new sigma({ \n" +
-                                                            " graph: g,\n" +
-                                                            "  renderer: {\n" +
-                                                            "    container: document.getElementById('graph-container'),\n" +
-                                                            "    type: 'canvas'\n" +
-                                                            "  },\n" +
-                                                            "  settings: {\n" +
-                                                            "    edgeLabelSize: 'proportional',\n" +
-                            "enableEdgeHovering: true,\n"+
-                            "edgeHoverColor: '#999',\n"+
-                            "defaultEdgeHoverColor: '#000',\n"+
-                            "edgeHoverSizeRatio: 1,\n"+
-                            "edgeHoverExtremities: true\n"+
-                                                            "  }\n"+
-                             
+            "<head>\n" +
+            "<style type=\"text/css\">\n" +
+            "  #container {\n" +
+            "    max-width: 400px;\n" +
+            "    height: 400px;\n" +
+            "    margin: auto;\n" +
+            "  }\n" +
+            "</style>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "\n" +
+            "<h1></h1>\n" +
+            "\n" +
 
-                                "}); " +
-                            "s.startForceAtlas2({worker: true, barnesHutOptimize: false});\n" +
-                            "\n" +
-                            "\n" +
-                            "function stopButtonClicked() {\n" +
-                            "    s.stopForceAtlas2({worker: true, barnesHutOptimize: false});\n" +
-                            "}\n" +
-                            "\n" +
-                            "// Initialize the dragNodes plugin:\n" +
-                            "var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);\n" +
-                            "dragListener.bind('startdrag', function(event) {\n" +
-                            "  console.log(event);\n" +
-                            "});\n" +
-                            "dragListener.bind('drag', function(event) {\n" +
-                            "  console.log(event);\n" +
-                            "});\n" +
-                            "dragListener.bind('drop', function(event) {\n" +
-                            "  console.log(event);\n" +
-                            "});\n" +
-                            "dragListener.bind('dragend', function(event) {\n" +
-                            "  console.log(event);\n" +
-                            "});";
-          
-          
-          String finalText = "</script></html>";
-        try (PrintWriter textOut = new PrintWriter("\\graphdisplay.html")) {
+             "<button onclick=\"stopButtonClicked()\">Stop layout algorithm</button>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/sigma.core.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/conrad.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/utils/sigma.utils.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/utils/sigma.polyfills.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/sigma.settings.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.dispatcher.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.configurable.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.graph.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.camera.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.quad.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.edgequad.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/captors/sigma.captors.mouse.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/captors/sigma.captors.touch.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.canvas.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.webgl.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.svg.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.nodes.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.nodes.fast.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.edges.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.edges.fast.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.edges.arrow.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.labels.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.hovers.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.nodes.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.curve.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.arrow.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.curvedArrow.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.curve.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.arrow.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.curvedArrow.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.extremities.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.utils.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.nodes.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.edges.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.edges.curve.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.labels.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.hovers.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/middlewares/sigma.middlewares.rescale.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/middlewares/sigma.middlewares.copy.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.animation.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.bindEvents.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.bindDOMEvents.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.drawHovers.js\"></script>\n" +
+            "\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.plugins.animate/sigma.plugins.animate.js\"></script>\n" +
+            "\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.parsers.json/sigma.parsers.json.min.js\"></script>\n" +
+            "\n" +
+              "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/settings.js\"></script>\n" +
+             "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.curve.js\"></script>\n" +
+             "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.curvedArrow.js\"></script>\n" +
+             "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.def.js\"></script>\n" +
+                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.layout.forceAtlas2/worker.js\"></script>\n" +
+                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.layout.forceAtlas2/supervisor.js\"></script>\n" +
+                "\n" +
+                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.plugins.dragNodes/sigma.plugins.dragNodes.js\"></script>\n" +
+                "\n" +
+                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.parsers.gexf/gexf-parser.js\"></script>\n" +
+                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.parsers.gexf/sigma.parsers.gexf.js\"></script>\n" +
+                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.plugins.filter/sigma.plugins.filter.js\"></script>" +
+            "\n" +
+            "<div id=\"container\">\n" +
+            "    \n" +
+            "  <style>\n" +
+            "    #graph-container {\n" +
+            "      top: 0;\n" +
+            "      bottom: 0;\n" +
+            "      left: 500;\n" +
+            "      right: 0;\n" +
+            "      position: absolute;\n" +
+            "    }\n" +
+            "  </style>\n" +
+            "  <div id=\"graph-container\"></div>\n" +
+            "</div>\n" +
+            "<script>";
+        
+        
+        String javaScriptText1 = "    var i,\n" +
+            "    s,\n" +
+            "    N = "+numberNodes+",\n" +
+            "    E = "+numberEdges+",\n" +
+            "    g = {\n" +
+            "      nodes: [],\n" +
+            "      edges: []\n" +
+            "    };\n" +
+            "// Generate a graph:\n" ;
+                    
+        String javaScriptText2 = "";
+        for (int i = 0; i<numberNodes; i++)
+        {
+            javaScriptText2 = javaScriptText2+ "  g.nodes.push({\n" +
+                "    id: '"+nodes[i][0]+"',\n" +
+                "    label: '"+nodes[i][1]+"',\n" +
+                "    x: Math.random(),\n" +
+                "    y: Math.random(),\n" +
+                "    size: 50,\n" +
+                "    color: '#888'\n" +
+                "  });\n" ;
+         }
+                  
+        String javaScriptText3 = "";
+        for (int j = 0; j<numberEdges; j++)
+        {
+            javaScriptText3 = javaScriptText3 +
+                "  g.edges.push({\n" +
+                "    id: 'e' + "+j+",\n" +
+                "    source:'"+rels[j][0]+"' ,\n" +
+                "    target:'"+rels[j][1]+"',\n" +
+                "    label: '"+rels[j][2]+"',\n" +
+                "    color: '#c6583e',\n" +
+                "    size: 4,\n"+
+                "    hover_color: '#000'\n" +
+                "  });\n";
+        }
+                             
+        javaScriptText3 = javaScriptText3 + "s = new sigma({ \n" +
+            " graph: g,\n" +
+            "  renderer: {\n" +
+            "    container: document.getElementById('graph-container'),\n" +
+            "    type: 'canvas'\n" +
+            "  },\n" +
+            "  settings: {\n" +
+            "    edgeLabelSize: 'proportional',\n" +
+            "enableEdgeHovering: true,\n"+
+            "edgeHoverColor: '#999',\n"+
+            "defaultEdgeHoverColor: '#000',\n"+
+            "edgeHoverSizeRatio: 1,\n"+
+            "edgeHoverExtremities: true\n"+
+            "  }\n"+
+
+            "}); " +
+            "s.startForceAtlas2({worker: true, barnesHutOptimize: false});\n" +
+            "\n" +
+            "\n" +
+            "function stopButtonClicked() {\n" +
+            "    s.stopForceAtlas2({worker: true, barnesHutOptimize: false});\n" +
+            "}\n" +
+            "\n" +
+            "// Initialize the dragNodes plugin:\n" +
+            "var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);\n" +
+            "dragListener.bind('startdrag', function(event) {\n" +
+            "  console.log(event);\n" +
+            "});\n" +
+            "dragListener.bind('drag', function(event) {\n" +
+            "  console.log(event);\n" +
+            "});\n" +
+            "dragListener.bind('drop', function(event) {\n" +
+            "  console.log(event);\n" +
+            "});\n" +
+            "dragListener.bind('dragend', function(event) {\n" +
+            "  console.log(event);\n" +
+            "});";
+        
+        String finalText = "</script></html>";
+        try (PrintWriter textOut = new PrintWriter("\\graphdisplay.html"))
+        {
             textOut.print(initialText+javaScriptText1+javaScriptText2+javaScriptText3+finalText);
             textOut.flush();
         }
@@ -1118,197 +1102,195 @@ public class GraphDatabaseForm extends javax.swing.JFrame
       */    
     private void writeHTMLFile(String[][] result) throws FileNotFoundException           
     {
-        
         int numberNodes = result.length;
         int numberEdges = result.length-1;
         
         String mainNodeID = result[0][0];
         
-             String mainNodeName = result[0][1];
+        String mainNodeName = result[0][1];
 
         String initialText = "<html>\n" +
-                                "<head>\n" +
-                                "<style type=\"text/css\">\n" +
-                                "  #container {\n" +
-                                "    max-width: 400px;\n" +
-                                "    height: 400px;\n" +
-                                "    margin: auto;\n" +
-                                "  }\n" +
-                                "</style>\n" +
-                                "</head>\n" +
-                                "<body>\n" +
-                                "\n" +
-                                "<h1></h1>\n" +
-                                "\n" +
-                                "<button onclick=\"stopButtonClicked()\">Stop layout algorithm</button>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/sigma.core.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/conrad.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/utils/sigma.utils.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/utils/sigma.polyfills.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/sigma.settings.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.dispatcher.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.configurable.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.graph.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.camera.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.quad.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.edgequad.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/captors/sigma.captors.mouse.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/captors/sigma.captors.touch.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.canvas.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.webgl.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.svg.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.nodes.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.nodes.fast.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.edges.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.edges.fast.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.edges.arrow.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.labels.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.hovers.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.nodes.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.curve.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.arrow.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.curvedArrow.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.curve.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.arrow.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.curvedArrow.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.extremities.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.utils.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.nodes.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.edges.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.edges.curve.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.labels.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.hovers.def.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/middlewares/sigma.middlewares.rescale.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/middlewares/sigma.middlewares.copy.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.animation.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.bindEvents.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.bindDOMEvents.js\"></script>\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.drawHovers.js\"></script>\n" +
-                                "\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.plugins.animate/sigma.plugins.animate.js\"></script>\n" +
-                                "\n" +
-                                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.parsers.json/sigma.parsers.json.min.js\"></script>\n" +
-                                "\n" +
-                                  "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/settings.js\"></script>\n" +
-                                 "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.curve.js\"></script>\n" +
-                                 "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.curvedArrow.js\"></script>\n" +
-                                 "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.def.js\"></script>\n" +
-                                    "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.layout.forceAtlas2/worker.js\"></script>\n" +
-                                    "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.layout.forceAtlas2/supervisor.js\"></script>\n" +
-                                    "\n" +
-                                    "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.plugins.dragNodes/sigma.plugins.dragNodes.js\"></script>\n" +
-                                    "\n" +
-                                    "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.parsers.gexf/gexf-parser.js\"></script>\n" +
-                                    "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.parsers.gexf/sigma.parsers.gexf.js\"></script>\n" +
-                                    "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.plugins.filter/sigma.plugins.filter.js\"></script>" +
-                                "\n" +
-                                "<div id=\"container\">\n" +
-                                "    \n" +
-                                "  <style>\n" +
-                                "    #graph-container {\n" +
-                                "      top: 0;\n" +
-                                "      bottom: 0;\n" +
-                                "      left: 500;\n" +
-                                "      right: 0;\n" +
-                                "      position: absolute;\n" +
-                                "    }\n" +
-                                "  </style>\n" +
-                                "  <div id=\"graph-container\"></div>\n" +
-                                "</div>\n" +
-                                "<script>";
+            "<head>\n" +
+            "<style type=\"text/css\">\n" +
+            "  #container {\n" +
+            "    max-width: 400px;\n" +
+            "    height: 400px;\n" +
+            "    margin: auto;\n" +
+            "  }\n" +
+            "</style>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "\n" +
+            "<h1></h1>\n" +
+            "\n" +
+            "<button onclick=\"stopButtonClicked()\">Stop layout algorithm</button>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/sigma.core.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/conrad.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/utils/sigma.utils.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/utils/sigma.polyfills.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/sigma.settings.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.dispatcher.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.configurable.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.graph.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.camera.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.quad.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/classes/sigma.classes.edgequad.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/captors/sigma.captors.mouse.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/captors/sigma.captors.touch.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.canvas.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.webgl.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.svg.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/sigma.renderers.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.nodes.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.nodes.fast.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.edges.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.edges.fast.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/webgl/sigma.webgl.edges.arrow.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.labels.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.hovers.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.nodes.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.curve.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.arrow.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edges.curvedArrow.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.curve.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.arrow.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.edgehovers.curvedArrow.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/canvas/sigma.canvas.extremities.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.utils.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.nodes.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.edges.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.edges.curve.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.labels.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/renderers/svg/sigma.svg.hovers.def.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/middlewares/sigma.middlewares.rescale.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/middlewares/sigma.middlewares.copy.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.animation.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.bindEvents.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.bindDOMEvents.js\"></script>\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/src/misc/sigma.misc.drawHovers.js\"></script>\n" +
+            "\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.plugins.animate/sigma.plugins.animate.js\"></script>\n" +
+            "\n" +
+            "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.parsers.json/sigma.parsers.json.min.js\"></script>\n" +
+            "\n" +
+              "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/settings.js\"></script>\n" +
+             "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.curve.js\"></script>\n" +
+             "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.curvedArrow.js\"></script>\n" +
+             "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.renderers.edgeLabels/sigma.canvas.edges.labels.def.js\"></script>\n" +
+                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.layout.forceAtlas2/worker.js\"></script>\n" +
+                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.layout.forceAtlas2/supervisor.js\"></script>\n" +
+                "\n" +
+                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.plugins.dragNodes/sigma.plugins.dragNodes.js\"></script>\n" +
+                "\n" +
+                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.parsers.gexf/gexf-parser.js\"></script>\n" +
+                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.parsers.gexf/sigma.parsers.gexf.js\"></script>\n" +
+                "<script src=\"D:/JavaApplets/sigma.js-1.0.3/plugins/sigma.plugins.filter/sigma.plugins.filter.js\"></script>" +
+            "\n" +
+            "<div id=\"container\">\n" +
+            "    \n" +
+            "  <style>\n" +
+            "    #graph-container {\n" +
+            "      top: 0;\n" +
+            "      bottom: 0;\n" +
+            "      left: 500;\n" +
+            "      right: 0;\n" +
+            "      position: absolute;\n" +
+            "    }\n" +
+            "  </style>\n" +
+            "  <div id=\"graph-container\"></div>\n" +
+            "</div>\n" +
+            "<script>";
         
         
-                  String javaScriptText1 = "    var i,\n" +
-                                "    s,\n" +
-                                "    N = "+numberNodes+",\n" +
-                                "    E = "+numberEdges+",\n" +
-                                "    g = {\n" +
-                                "      nodes: [],\n" +
-                                "      edges: []\n" +
-                                "    };\n" +
-                                "// Generate a graph:\n" +
-                     "  g.nodes.push({\n" +
-                                "    id: '"+mainNodeID+"',\n" +
-                                "    label: '"+mainNodeName+"' ,\n" +
-                                "    x: 0.5,\n" +
-                                "    y: 0.5,\n" +
-                                "    size: 50,\n" +
-                                "    color: '#ec5148'\n" +
-                          
-                                "  });\n" ;
+        String javaScriptText1 = "    var i,\n" +
+            "    s,\n" +
+            "    N = "+numberNodes+",\n" +
+            "    E = "+numberEdges+",\n" +
+            "    g = {\n" +
+            "      nodes: [],\n" +
+            "      edges: []\n" +
+            "    };\n" +
+            "// Generate a graph:\n" +
+            "  g.nodes.push({\n" +
+            "    id: '"+mainNodeID+"',\n" +
+            "    label: '"+mainNodeName+"' ,\n" +
+            "    x: 0.5,\n" +
+            "    y: 0.5,\n" +
+            "    size: 50,\n" +
+            "    color: '#ec5148'\n" +
+            "  });\n" ;
                   
-                  String javaScriptText2 = "";
-                  List<String> usedIDs = new ArrayList<String>();
-                  for (int i = 1; i<numberNodes; i++)
-                  {
-                      if (!usedIDs.contains(result[i][2])){
-                      javaScriptText2 = javaScriptText2+ "  g.nodes.push({\n" +
-                                "    id: '"+result[i][2]+"',\n" +
-                                "    label: '"+result[i][3]+"',\n" +
-                                "    x: Math.random(),\n" +
-                                "    y: Math.random(),\n" +
-                                "    size: 50,\n" +
-                                "    color: '#888'\n" +
-                                "  });\n" ;
-                      
-                      usedIDs.add(result[i][2]);
-                  }      
-                       javaScriptText2 = javaScriptText2+        "  g.edges.push({\n" +
-                                "    id: 'e' + "+i+",\n" +
-                                "    source: '"+result[i][0]+"' ,\n" +
-                                "    target: '"+result[i][2]+"',\n" +
-                              "    label: '"+result[i][4]+"',\n" +
-                                "    size: 4,\n"+
-                        "    hover_color: '#000',\n" +
-                                "    color: '#c6583e'\n" +
-                                "  });\n";
-                  }
-                             
-                    javaScriptText2 = javaScriptText2 + "s = new sigma({ \n" +
-                                                            " graph: g,\n" +
-                                                            "  renderer: {\n" +
-                                                            "    container: document.getElementById('graph-container'),\n" +
-                                                            "    type: 'canvas'\n" +
-                                                            "  },\n" +
-                                                            "  settings: {\n" +
-                                                            "    edgeLabelSize: 'proportional',\n" +
-                             "enableEdgeHovering: true,\n"+
-                            "edgeHoverColor: '#999',\n"+
-                            "defaultEdgeHoverColor: '#000',\n"+
-                            "edgeHoverSizeRatio: 1,\n"+
-                            "edgeHoverExtremities: true\n"+
-                                                            "  }\n"+
-                             
+        String javaScriptText2 = "";
+        List<String> usedIDs = new ArrayList<String>();
+        for (int i = 1; i<numberNodes; i++)
+        {
+            if (!usedIDs.contains(result[i][2])){
+            javaScriptText2 = javaScriptText2+ "  g.nodes.push({\n" +
+                "    id: '"+result[i][2]+"',\n" +
+                "    label: '"+result[i][3]+"',\n" +
+                "    x: Math.random(),\n" +
+                "    y: Math.random(),\n" +
+                "    size: 50,\n" +
+                "    color: '#888'\n" +
+                "  });\n" ;
 
-                                "}); " +
-                            "s.startForceAtlas2({worker: true, barnesHutOptimize: false});\n" +
-                            "\n" +
-                            "\n" +
-                            "function stopButtonClicked() {\n" +
-                            "    s.stopForceAtlas2({worker: true, barnesHutOptimize: false});\n" +
-                            "}\n" +
-                            "\n" +
-                            "// Initialize the dragNodes plugin:\n" +
-                            "var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);\n" +
-                            "dragListener.bind('startdrag', function(event) {\n" +
-                            "  console.log(event);\n" +
-                            "});\n" +
-                            "dragListener.bind('drag', function(event) {\n" +
-                            "  console.log(event);\n" +
-                            "});\n" +
-                            "dragListener.bind('drop', function(event) {\n" +
-                            "  console.log(event);\n" +
-                            "});\n" +
-                            "dragListener.bind('dragend', function(event) {\n" +
-                            "  console.log(event);\n" +
-                            "});";
+            usedIDs.add(result[i][2]);
+        }      
+        
+        javaScriptText2 = javaScriptText2 + "  g.edges.push({\n" +
+            "    id: 'e' + "+i+",\n" +
+            "    source: '"+result[i][0]+"' ,\n" +
+            "    target: '"+result[i][2]+"',\n" +
+            "    label: '"+result[i][4]+"',\n" +
+            "    size: 4,\n"+
+            "    hover_color: '#000',\n" +
+            "    color: '#c6583e'\n" +
+            "  });\n";
+        }
+                             
+            javaScriptText2 = javaScriptText2 + "s = new sigma({ \n" +
+                " graph: g,\n" +
+                "  renderer: {\n" +
+                "    container: document.getElementById('graph-container'),\n" +
+                "    type: 'canvas'\n" +
+                "  },\n" +
+                "  settings: {\n" +
+                "    edgeLabelSize: 'proportional',\n" +
+                "enableEdgeHovering: true,\n"+
+                "edgeHoverColor: '#999',\n"+
+                "defaultEdgeHoverColor: '#000',\n"+
+                "edgeHoverSizeRatio: 1,\n"+
+                "edgeHoverExtremities: true\n"+
+                "  }\n"+
+                             
+                "}); " +
+                "s.startForceAtlas2({worker: true, barnesHutOptimize: false});\n" +
+                "\n" +
+                "\n" +
+                "function stopButtonClicked() {\n" +
+                "    s.stopForceAtlas2({worker: true, barnesHutOptimize: false});\n" +
+                "}\n" +
+                "\n" +
+                "// Initialize the dragNodes plugin:\n" +
+                "var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);\n" +
+                "dragListener.bind('startdrag', function(event) {\n" +
+                "  console.log(event);\n" +
+                "});\n" +
+                "dragListener.bind('drag', function(event) {\n" +
+                "  console.log(event);\n" +
+                "});\n" +
+                "dragListener.bind('drop', function(event) {\n" +
+                "  console.log(event);\n" +
+                "});\n" +
+                "dragListener.bind('dragend', function(event) {\n" +
+                "  console.log(event);\n" +
+                "});";
           
-          
-          String finalText = "</script></html>";
-        try (PrintWriter textOut = new PrintWriter("\\graphdisplay.html")) {
+        String finalText = "</script></html>";
+        try (PrintWriter textOut = new PrintWriter("\\graphdisplay.html")) 
+        {
             textOut.print(initialText+javaScriptText1+javaScriptText2+finalText);
             textOut.flush();
         }
@@ -1320,10 +1302,12 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     /**
      * Creates new form GraphDatabaseForm. 
      * @param driver
+     * @param session 
      */
     public GraphDatabaseForm(Driver driver, Session session)
     {
-        
+        this.driver = driver;
+        this.session = session;
         initComponents();
         customInitComponents();
     }
@@ -2153,20 +2137,14 @@ public class GraphDatabaseForm extends javax.swing.JFrame
 
     /**
      * customInitComponents
-     */
-     private void customInitComponents(){
-         
-       
-       createNodePropertyList = new ArrayList<>();
-       createRelationshipPropertyList = new ArrayList<>();
-      
-       FileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-       
-      
-       this.setTitle("Graph Database Updates");
-             
-            
-     }
+    */
+    private void customInitComponents()
+    {
+        createNodePropertyList = new ArrayList<>();
+        createRelationshipPropertyList = new ArrayList<>();
+        FileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        this.setTitle("Graph Database Updates");
+    }
     
      /**
       * ButtonAddProperty1ActionPerformed: add new property to list of new node properties
@@ -2175,18 +2153,18 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     
     private void ButtonAddProperty1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddProperty1ActionPerformed
      
-    //add new property to list    
-    String[] s = {ComboBoxProperty1.getSelectedItem().toString(),TextField1.getText()};
-    createNodePropertyList.add(s);
-    jTextPane1.setText(jTextPane1.getText()+"\n Added node property: "+ComboBoxProperty1.getSelectedItem().toString()+": "+TextField1.getText());
-    
-    //add possible new property type to hashmap of node property types
-    List<String> props = new ArrayList(Arrays.asList(nodeProperties.get(ComboBoxType1.getSelectedItem().toString())));//get properties for this node type and turn into list to be searched
-    if (!props.contains(ComboBoxProperty1.getSelectedItem().toString()))//if current property is not already in the list   
-    {
-       props.add(ComboBoxProperty1.getSelectedItem().toString());
-       nodeProperties.replace(ComboBoxType1.getSelectedItem().toString(), props.toArray(new String[props.size()]));
-    }
+        //add new property to list    
+        String[] s = {ComboBoxProperty1.getSelectedItem().toString(),TextField1.getText()};
+        createNodePropertyList.add(s);
+        jTextPane1.setText(jTextPane1.getText()+"\n Added node property: "+ComboBoxProperty1.getSelectedItem().toString()+": "+TextField1.getText());
+
+        //add possible new property type to hashmap of node property types
+        List<String> props = new ArrayList(Arrays.asList(nodeProperties.get(ComboBoxType1.getSelectedItem().toString())));//get properties for this node type and turn into list to be searched
+        if (!props.contains(ComboBoxProperty1.getSelectedItem().toString()))//if current property is not already in the list   
+        {
+           props.add(ComboBoxProperty1.getSelectedItem().toString());
+           nodeProperties.replace(ComboBoxType1.getSelectedItem().toString(), props.toArray(new String[props.size()]));
+        }
     }//GEN-LAST:event_ButtonAddProperty1ActionPerformed
 
     /**
@@ -2203,32 +2181,23 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ButtonCreateNodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCreateNodeActionPerformed
-        
-      
+
         String IDString = getNewID();
         String propertyList = "ID: '"+IDString+"',";
-        
-                  for (int i = 0; i<createNodePropertyList.size(); i++)
-            {
-               propertyList = propertyList +createNodePropertyList.get(i)[0]+": '"+createNodePropertyList.get(i)[1]+"',";
-            }
-                  
-    
-               try ( Transaction tx = graphDb.beginTx() )
-        {
-        
-            propertyList = propertyList.substring(0,propertyList.length()-1);//remove last comma
-       graphDb.execute( "create (newNode:"+ ComboBoxType1.getSelectedItem().toString()+"{"+propertyList+"})") ;
-       
-       tx.success();
-        }
-        jTextPane1.setText(jTextPane1.getText()+"\n Created new node: "+ComboBoxType1.getSelectedItem().toString()+" "+propertyList);
-         createNodePropertyList.clear();
-         
-         refreshNode1Panel();
-         refreshPanels();
 
-    
+        for (int i = 0; i<createNodePropertyList.size(); i++)
+        {
+            propertyList = propertyList +createNodePropertyList.get(i)[0]+": '"+createNodePropertyList.get(i)[1]+"',";
+        }
+
+        propertyList = propertyList.substring(0,propertyList.length()-1);//remove last comma
+        session.run( "create (newNode:"+ ComboBoxType1.getSelectedItem().toString()+"{"+propertyList+"})") ;
+        
+        jTextPane1.setText(jTextPane1.getText()+"\n Created new node: "+ComboBoxType1.getSelectedItem().toString()+" "+propertyList);
+        createNodePropertyList.clear();
+         
+        refreshNode1Panel();
+        refreshPanels();
     }//GEN-LAST:event_ButtonCreateNodeActionPerformed
 
     /**
@@ -2246,14 +2215,14 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ComboBoxType2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxType2ActionPerformed
-                String [] names = getNodeNames((String) ComboBoxType2.getSelectedItem());
-                ComboBoxName1.setModel(new javax.swing.DefaultComboBoxModel(names));
-                ComboBoxID1.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType2.getSelectedItem().toString(), ComboBoxName1.getSelectedItem().toString())));
-                ComboBoxProperty2.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypesfromID(ComboBoxID1.getSelectedItem().toString())));
-                TextField2.setText(getNodePropertyValue(ComboBoxProperty2.getSelectedItem().toString(), ComboBoxID1.getSelectedItem().toString())[0]);
-                
-                refreshPanels();
         
+        String [] names = getNodeNames((String) ComboBoxType2.getSelectedItem());
+        ComboBoxName1.setModel(new javax.swing.DefaultComboBoxModel(names));
+        ComboBoxID1.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType2.getSelectedItem().toString(), ComboBoxName1.getSelectedItem().toString())));
+        ComboBoxProperty2.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypesfromID(ComboBoxID1.getSelectedItem().toString())));
+        TextField2.setText(getNodePropertyValue(ComboBoxProperty2.getSelectedItem().toString(), ComboBoxID1.getSelectedItem().toString())[0]);
+
+        refreshPanels();
     }//GEN-LAST:event_ComboBoxType2ActionPerformed
 
     /**
@@ -2261,11 +2230,12 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ComboBoxName1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxName1ActionPerformed
-                ComboBoxID1.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType2.getSelectedItem().toString(), ComboBoxName1.getSelectedItem().toString())));
-                ComboBoxProperty2.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypesfromID(ComboBoxID1.getSelectedItem().toString())));
-                TextField2.setText(getNodePropertyValue(ComboBoxProperty2.getSelectedItem().toString(), ComboBoxID1.getSelectedItem().toString())[0]);
-                
-                refreshPanels();
+        
+        ComboBoxID1.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType2.getSelectedItem().toString(), ComboBoxName1.getSelectedItem().toString())));
+        ComboBoxProperty2.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypesfromID(ComboBoxID1.getSelectedItem().toString())));
+        TextField2.setText(getNodePropertyValue(ComboBoxProperty2.getSelectedItem().toString(), ComboBoxID1.getSelectedItem().toString())[0]);
+
+        refreshPanels();
     }//GEN-LAST:event_ComboBoxName1ActionPerformed
 
     /**
@@ -2274,15 +2244,15 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      */
     private void ComboBoxRelationship1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxRelationship1ActionPerformed
          
-          if(!ComboBoxRelationship1.getSelectedItem().equals(" ")) {
-        ComboBoxProperty3.setModel(new javax.swing.DefaultComboBoxModel(relationshipProperties.get(ComboBoxRelationship1.getSelectedItem())));
-       
-        ComboBoxType3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Types(ComboBoxRelationship1.getSelectedItem().toString())));
-        ComboBoxName3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Names(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString())));
-        ComboBoxID2.setModel(new javax.swing.DefaultComboBoxModel(getNode2IDs(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxName3.getSelectedItem().toString())));
-  
-         TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
-        
+        if(!ComboBoxRelationship1.getSelectedItem().equals(" ")) 
+        {
+            ComboBoxProperty3.setModel(new javax.swing.DefaultComboBoxModel(relationshipProperties.get(ComboBoxRelationship1.getSelectedItem())));
+
+            ComboBoxType3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Types(ComboBoxRelationship1.getSelectedItem().toString())));
+            ComboBoxName3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Names(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString())));
+            ComboBoxID2.setModel(new javax.swing.DefaultComboBoxModel(getNode2IDs(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxName3.getSelectedItem().toString())));
+
+            TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
         }
     }//GEN-LAST:event_ComboBoxRelationship1ActionPerformed
 
@@ -2292,10 +2262,11 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      */
     private void ComboBoxRelationship2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxRelationship2ActionPerformed
         
-        if(!ComboBoxRelationship2.getSelectedItem().equals(" ")) {
-        ComboBoxProperty4.setModel(new javax.swing.DefaultComboBoxModel(relationshipProperties.get(ComboBoxRelationship2.getSelectedItem())));
-       refreshNode2Panel2();}
-            
+        if(!ComboBoxRelationship2.getSelectedItem().equals(" "))
+        {
+            ComboBoxProperty4.setModel(new javax.swing.DefaultComboBoxModel(relationshipProperties.get(ComboBoxRelationship2.getSelectedItem())));
+            refreshNode2Panel2();
+        }    
     }//GEN-LAST:event_ComboBoxRelationship2ActionPerformed
 
     /**
@@ -2303,9 +2274,9 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ComboBoxType4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxType4ActionPerformed
+       
         ComboBoxName4.setModel(new javax.swing.DefaultComboBoxModel(getNodeNames(ComboBoxType4.getSelectedItem().toString()))); 
-       ComboBoxID3.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType4.getSelectedItem().toString(), ComboBoxName4.getSelectedItem().toString())));
-
+        ComboBoxID3.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType4.getSelectedItem().toString(), ComboBoxName4.getSelectedItem().toString())));
     }//GEN-LAST:event_ComboBoxType4ActionPerformed
 
     /**
@@ -2313,17 +2284,18 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ButtonAddProperty2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddProperty2ActionPerformed
-    String[] s = {ComboBoxProperty4.getSelectedItem().toString(),TextField4.getText()};
-    createRelationshipPropertyList.add(s);
-    jTextPane1.setText(jTextPane1.getText()+"\n Added relationship property: "+ComboBoxProperty4.getSelectedItem().toString()+": "+TextField4.getText());
-    
-    //add possible new property type to hashmap of relationship property types
-    List<String> props = new ArrayList(Arrays.asList(relationshipProperties.get(ComboBoxRelationship2.getSelectedItem().toString())));//get properties for this node type and turn into list to be searched
-    if (!props.contains(ComboBoxProperty4.getSelectedItem().toString()))//if current property is not already in the list   
-    {
-       props.add(ComboBoxProperty4.getSelectedItem().toString());
-       relationshipProperties.replace(ComboBoxRelationship2.getSelectedItem().toString(), props.toArray(new String[props.size()]));
-    }
+        
+        String[] s = {ComboBoxProperty4.getSelectedItem().toString(),TextField4.getText()};
+        createRelationshipPropertyList.add(s);
+        jTextPane1.setText(jTextPane1.getText()+"\n Added relationship property: "+ComboBoxProperty4.getSelectedItem().toString()+": "+TextField4.getText());
+
+        //add possible new property type to hashmap of relationship property types
+        List<String> props = new ArrayList(Arrays.asList(relationshipProperties.get(ComboBoxRelationship2.getSelectedItem().toString())));//get properties for this node type and turn into list to be searched
+        if (!props.contains(ComboBoxProperty4.getSelectedItem().toString()))//if current property is not already in the list   
+        {
+            props.add(ComboBoxProperty4.getSelectedItem().toString());
+            relationshipProperties.replace(ComboBoxRelationship2.getSelectedItem().toString(), props.toArray(new String[props.size()]));
+        }
     }//GEN-LAST:event_ButtonAddProperty2ActionPerformed
 
     /**
@@ -2331,40 +2303,32 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ButtonCreateRelationshipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCreateRelationshipActionPerformed
-         String propertyList = "";
         
-                  for (int i = 0; i<createRelationshipPropertyList.size(); i++)
-            {
-               propertyList = propertyList +createRelationshipPropertyList.get(i)[0]+": '"+createRelationshipPropertyList.get(i)[1]+"',";
-            }
-                  
-                  if(propertyList.length()>0)
-                  {
-                      propertyList = propertyList.substring(0, propertyList.length()-1);
-                  }
-    
-               try ( Transaction tx = graphDb.beginTx() )
-        {
-            
+        String propertyList = "";
 
+        for (int i = 0; i<createRelationshipPropertyList.size(); i++)
+        {
+            propertyList = propertyList +createRelationshipPropertyList.get(i)[0]+": '"+createRelationshipPropertyList.get(i)[1]+"',";
+        }
+
+        if(propertyList.length()>0)
+        {
+            propertyList = propertyList.substring(0, propertyList.length()-1);
+        }
+        
         String matchString = "match (node1), (node2) ";
         String whereString = "where node1.ID = '"+ComboBoxID1.getSelectedItem().toString()+"' and node2.ID = '"+ComboBoxID3.getSelectedItem().toString()+"' ";
         String createString = "create (node1) - [r:"+ComboBoxRelationship2.getSelectedItem().toString() + "{ "+propertyList+"}]->(node2)";
         System.out.println(matchString+whereString+createString);
             
-        graphDb.execute(matchString+whereString+createString);
-       
-
-        tx.success();
-        }
+        session.run(matchString+whereString+createString);
+        
         jTextPane1.setText(jTextPane1.getText()+"\n Created new relationship: "+ComboBoxName1.getSelectedItem().toString()+" - "+ComboBoxRelationship2.getSelectedItem().toString()+" "+propertyList+ " -> "+ComboBoxName4.getSelectedItem().toString());
         createRelationshipPropertyList.clear();
         
         refreshCurrentRelationshipPanel();
         refreshNode2Panel1();
         TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
- 
-
     }//GEN-LAST:event_ButtonCreateRelationshipActionPerformed
 
     /**
