@@ -8,11 +8,14 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
+import org.neo4j.driver.v1.GraphDatabase;
+import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Session;
-
-
+import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.Transaction;
 
 /**
  * Swing application for creating and editing Neo4j graph databases.
@@ -25,8 +28,8 @@ import org.neo4j.driver.v1.Session;
  */
 public class GraphDatabaseForm extends javax.swing.JFrame
 {
-    private final Driver driver;
-    private final Session session;
+    private Driver driver;
+    private Session session;
     private HashMap<String, String[]> nodeProperties;// map linking node types to their properties
     private HashMap<String, String[]> relationshipProperties;// map linking relationship types to their properties
     private HashMap<String, String[]> nodeRelationships;// map linking node types to their relationship types
@@ -35,75 +38,81 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     private ArrayList<String[]> createRelationshipPropertyList; // list of new properties and their values to be added to selected relationship
     private ArrayList<String> allNodeIDs; // list of all the node IDs in current database
     
-    
-    
     /**
      * getValuesFromCSV: fills a 2D arraylist of strings with values from given CSV file
      * @param filePath
      * @return 
      */
-    private ArrayList<ArrayList<String>> getValuesFromCSV(String filePath) {
- 
+    private ArrayList<ArrayList<String>> getValuesFromCSV(String filePath)
+    {
 	String csvFile = filePath;
 	BufferedReader br = null;
 	String line = "";
-	ArrayList<ArrayList<String>> stringList = new ArrayList<ArrayList<String>>();
+	ArrayList<ArrayList<String>> stringList = new ArrayList<>();
         
-    
-	try {
-                int i = 0;
-		br = new BufferedReader(new FileReader(csvFile));
-		while ((line = br.readLine()) != null) {
- 
-	            String[] s = line.split(",");
-                    stringList.add(new ArrayList<String>(Arrays.asList(s)));
-                                       i++;
- 
-		}
- 
-	} catch (FileNotFoundException e) {
-             System.out.println("File: "+filePath+" not found.");
-	} catch (IOException e) {
-            System.out.println("IO Exception.");
-	} finally {
-		if (br != null) {
-			try {
-				br.close();
-			} catch (IOException e) {
-			}
-		}
+	try
+        {
+            int i = 0;
+            br = new BufferedReader(new FileReader(csvFile));
+            while ((line = br.readLine()) != null)
+            {
+                String[] s = line.split(",");
+                stringList.add(new ArrayList<>(Arrays.asList(s)));
+                
+                i++;
+            }
+	}
+        catch (FileNotFoundException e)
+        {
+            System.out.println("File: "+filePath+" not found.");
+	}
+        catch (IOException e)
+        {
+            System.out.println("IO Exception - getValuesFromCSV: " + e.getMessage());
+	}
+        finally 
+        {
+            if (br != null) {
+                try
+                {
+                    br.close();
+                } 
+                catch (IOException e) 
+                {
+                    System.err.println("IO Exception - getValuesFromCSV: " + e.getMessage());
+                }
+            }
 	}
  
 	return stringList;
-  }
+    }
       /**
        * createMapFromLists: converts 2D arraylist of strings into maps. e.g. each node type as a key and its properties as values
        * @param nodeVals
        * @return 
        */  
-    private HashMap<String, String[]>  createMapFromLists(ArrayList<ArrayList<String>> nodeVals) {
-        
+    private HashMap<String, String[]>  createMapFromLists(ArrayList<ArrayList<String>> nodeVals)
+    {
         HashMap<String, String[]> map = new HashMap<>();
         String[] keys = new String[nodeVals.size()];
         for(int i=0; i<nodeVals.size(); i++)
-       {
-           keys[i] = nodeVals.get(i).get(0);
-           int rowLength = nodeVals.get(i).size();
-           String[] props = new String[rowLength-1];
-           
-           for(int j=0; j<nodeVals.get(i).size()-1; j++)
-           {
-               props[j] = nodeVals.get(i).get(j+1);
-           }
-           
-           if(props.length==0)
-           {
-               props = new String[]{" ", " "};
-           }
-                               
-        map.put(keys[i], props);
-       }
-        
+        {
+            keys[i] = nodeVals.get(i).get(0);
+            int rowLength = nodeVals.get(i).size();
+            String[] props = new String[rowLength-1];
+
+            for(int j=0; j<nodeVals.get(i).size()-1; j++)
+            {
+                props[j] = nodeVals.get(i).get(j+1);
+            }
+
+            if(props.length==0)
+            {
+                props = new String[]{" ", " "};
+            }
+
+            map.put(keys[i], props);
+        }
         return map;
     }
     
@@ -114,83 +123,105 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     private void setAllNodeIDs()
     {
         allNodeIDs = new ArrayList<>();
-        
-        try ( Transaction tx = graphDb.beginTx() )
-        {
-         
-            Result result = graphDb.execute( "match (n) return n.ID" ) ;
-     
-                           
-            while ( result.hasNext() )
-                {
-                       Map<String,Object> row = result.next();
-            
-                       String rows = "";
-                        for ( Entry<String,Object> column : row.entrySet() )
-                         {
-                            rows += column.getValue();
-                                                      
-                            allNodeIDs.add(rows);
-                                                       
-                          }
-            }
 
-            tx.success();
+        StatementResult result = session.run( "MATCH (n) RETURN n.ID AS ID" );
+        while ( result.hasNext() )
+        {
+            Record record = result.next();
+            Map<String,Object> row = record.asMap();
+            String rows = "";
+            for ( Entry<String,Object> column : row.entrySet() )
+            {
+                rows += column.getValue();
+                allNodeIDs.add(rows);
+            }
         }
         allNodeIDs.removeAll(Collections.singleton("null"));
-        java.util.Collections.sort(allNodeIDs);   
+        java.util.Collections.sort(allNodeIDs);  
+        
+//        try ( Transaction tx = graphDb.beginTx() )
+//        {
+//         
+//            
+//            Result result = driver.graphDb.execute( "match (n) return n.ID" ) ;
+//     
+//                           
+//            while ( result.hasNext() )
+//                {
+//                       Map<String,Object> row = result.next();
+//            
+//                       String rows = "";
+//                        for ( Entry<String,Object> column : row.entrySet() )
+//                         {
+//                            rows += column.getValue();
+//                                                      
+//                            allNodeIDs.add(rows);
+//                                                       
+//                          }
+//            }
+//
+//            tx.success();
+//        } 
     }
    /**
     * getNewID: find an unused ID by finding largest current ID and adding 1
     * @return String ID (a long as a String)
     */
-    private String getNewID(){
-        
-        long maxID = 0;
-        
+    private String getNewID()
+    {
         ArrayList<Long> allNodeIDsLong = new ArrayList<>();
         
-         if (allNodeIDs.size()>0){
-                for(String s : allNodeIDs) {
-                             try{
-                                 allNodeIDsLong.add(Long.valueOf(s));//convert to long
-                                }
-                            catch (NumberFormatException e){
-                                System.out.println ("Cannot convert String to long.");
-                                    return null;
-                                }
-                    }
-        Collections.sort(allNodeIDsLong);
-        
-        maxID = allNodeIDsLong.get(allNodeIDsLong.size()-1);
-        long newID = maxID+1;
-        allNodeIDs.add(String.valueOf(newID));
-        return String.valueOf(newID);
+        if (allNodeIDs.size()>0)
+        {
+            for(String s : allNodeIDs)
+            {
+                try
+                {
+                    allNodeIDsLong.add(Long.valueOf(s));//convert to long
+                }
+                catch (NumberFormatException e)
+                {
+                    System.out.println ("Cannot convert String to long.");
+                    return null;
+                }
             }
-         
-            else{
+        
+            Collections.sort(allNodeIDsLong);
+        
+            long maxID = allNodeIDsLong.get(allNodeIDsLong.size()-1);
+            long newID = maxID+1;
+            allNodeIDs.add(String.valueOf(newID));
+            return String.valueOf(newID);
+        }
+        else
+        {
             allNodeIDs.add("1");
             return "1";
-            }
-                
+        }
+    }
     
-}
     /**
      * setNewDatabaseFields: start a new GraphDB service and load all of the current nodes, relationships, etc. into the drop-down boxes
      * @param DB_STRING 
      */
-
-    private void setNewDatabaseFields(String DB_STRING) {
-       
+    private void setNewDatabaseFields(String DB_STRING)
+    {
         //shutdown old dbservice if it's running
-        if(graphDb!=null)
+        if(driver!=null)
         {
-         graphDb.shutdown();
+            driver.close();
         }
-         
-        //Make new graph database service
-             graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(DB_STRING);
-       registerShutdownHook(graphDb); 
+        if(session!=null)
+        {
+            session.close();
+        }
+        
+        driver = GraphDatabase.driver( DB_STRING, AuthTokens.basic( "neo4j", "Nufoa23" ));
+        session = driver.session();
+//         
+//        //Make new graph database service
+//             graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(DB_STRING);
+//       registerShutdownHook(graphDb); 
        
        //put all of the current node IDs into a list
         setAllNodeIDs();
@@ -234,11 +265,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
        TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
        
        refreshCreateRelationshipPanel();
-       
-      
        refreshNode2Panel2();
-               
-        
     }
     
     /**
@@ -246,8 +273,8 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * 
      */
     
-    private void refreshNode1Panel(){
-        
+    private void refreshNode1Panel()
+    {
        ComboBoxName1.setModel(new javax.swing.DefaultComboBoxModel(getNodeNames(ComboBoxType2.getSelectedItem().toString()))); 
        ComboBoxID1.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType2.getSelectedItem().toString(), ComboBoxName1.getSelectedItem().toString())));
        ComboBoxProperty2.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypesfromID(ComboBoxID1.getSelectedItem().toString())));
@@ -259,56 +286,56 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * refreshCurrentRelationshipPanel: update drop-down boxes in current relationship panel
      */
     
-    private void refreshCurrentRelationshipPanel(){
+    private void refreshCurrentRelationshipPanel()
+    {
        ComboBoxRelationship1.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipTypes(ComboBoxType2.getSelectedItem().toString())));
        ComboBoxProperty3.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipProperties(ComboBoxRelationship1.getSelectedItem().toString())));
-       TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(),  ComboBoxProperty3.getSelectedItem().toString())[0]);
-      
+       TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), 
+               ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(),  ComboBoxProperty3.getSelectedItem().toString())[0]);
     }
     
     /**
      * refreshCreateRelationshipPanel: update drop-down boxes in create relationship panel
      */
     
-    private void refreshCreateRelationshipPanel(){
-        
+    private void refreshCreateRelationshipPanel()
+    {
        ComboBoxRelationship2.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipTypes(ComboBoxType2.getSelectedItem().toString())));
        ComboBoxProperty4.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipProperties(ComboBoxRelationship2.getSelectedItem().toString())));
        TextField4.setText("");//empty for new relationship
-        
     }
     
     /**
      * refreshNode2Panel1: update drop-down boxes in Node 2 panel 1
      */
     
-    private void refreshNode2Panel1(){
-        
+    private void refreshNode2Panel1()
+    {
        ComboBoxType3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Types(ComboBoxRelationship1.getSelectedItem().toString())));
-       ComboBoxName3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Names(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString())));
-       ComboBoxID2.setModel(new javax.swing.DefaultComboBoxModel(getNode2IDs(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxName3.getSelectedItem().toString())));
-  
-        
+       ComboBoxName3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Names(ComboBoxID1.getSelectedItem().toString(), 
+               ComboBoxRelationship1.getSelectedItem().toString())));
+       ComboBoxID2.setModel(new javax.swing.DefaultComboBoxModel(getNode2IDs(ComboBoxID1.getSelectedItem().toString(), 
+               ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxName3.getSelectedItem().toString())));
     }
     
     /**
      * refreshNode2Panel2: update drop-down boxes in Node 2 panel 2
      */
     
-      private void refreshNode2Panel2(){
-          
-       ComboBoxType4.setModel(new javax.swing.DefaultComboBoxModel(getNode2Types(ComboBoxRelationship2.getSelectedItem().toString())));
-       ComboBoxName4.setModel(new javax.swing.DefaultComboBoxModel(getNodeNames(ComboBoxType4.getSelectedItem().toString()))); 
-       ComboBoxID3.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType4.getSelectedItem().toString(), ComboBoxName4.getSelectedItem().toString())));
-
-        
+    private void refreshNode2Panel2()
+    {
+        ComboBoxType4.setModel(new javax.swing.DefaultComboBoxModel(getNode2Types(ComboBoxRelationship2.getSelectedItem().toString())));
+        ComboBoxName4.setModel(new javax.swing.DefaultComboBoxModel(getNodeNames(ComboBoxType4.getSelectedItem().toString()))); 
+        ComboBoxID3.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType4.getSelectedItem().toString(), 
+                ComboBoxName4.getSelectedItem().toString())));
     }
       
       /**
        * refreshPanels: update all panel boxes
        */
       
-      private void refreshPanels(){
+    private void refreshPanels()
+    {
        refreshCurrentRelationshipPanel();
        refreshNode2Panel1();
        TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
@@ -321,8 +348,8 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @return 
      */
     
-    private String[] getAllNodeTypes(){
-                       
+    private String[] getAllNodeTypes()
+    {
         return nodeProperties.keySet().toArray(new String[nodeProperties.size()]);
     }
     
@@ -331,8 +358,8 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param nodeType
      * @return 
      */
-    private String[] getPropertyTypes(String nodeType){
-        
+    private String[] getPropertyTypes(String nodeType)
+    {
         return nodeProperties.get(nodeType);
     }
     
@@ -341,38 +368,53 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param queryString
      * @return alphabetically sorted array of strings
      */
-    
-    private String[] getQueryResults(String queryString){
+    private String[] getQueryResults(String queryString)
+    {
+        ArrayList<String> resultList = new ArrayList<>();
         
-                        ArrayList<String> resultList = new ArrayList<>();
-                 try ( Transaction tx = graphDb.beginTx() )
-                    {
-             
-                         Result result = graphDb.execute( queryString ) ;
-     
-                           
-                while ( result.hasNext() )
-                    {
-                       Map<String,Object> row = result.next();
-            
-                       String rows = "";
-                        for ( Entry<String,Object> column : row.entrySet() )
-                         {
-                            rows += column.getValue();
-                            resultList.add(rows);
-                          }
-                    }
-
-                tx.success();
-                }
-            java.util.Collections.sort(resultList);
-            String[] returnList = resultList.toArray(new String[resultList.size()]);
-             
-            if(returnList.length>0){
-                 return returnList;}
-            else{
-                            return new String[]{" "};
+        StatementResult result = session.run( queryString );
+        while ( result.hasNext() )
+        {
+            Record record = result.next();
+            Map<String,Object> row = record.asMap();
+            String rows = "";
+            for ( Entry<String,Object> column : row.entrySet() )
+            {
+                rows += column.getValue();
+                resultList.add(rows);
             }
+        }
+        
+        java.util.Collections.sort(resultList);
+        String[] returnList = resultList.toArray(new String[resultList.size()]);
+
+        if(returnList.length>0)
+        {
+            return returnList;
+        }
+        else
+        {
+            return new String[]{" "};
+        }
+        
+//        try ( Transaction tx = graphDb.beginTx() )
+//        {
+//            Result result = graphDb.execute( queryString ) ;
+//         
+//            while ( result.hasNext() )
+//            {
+//               Map<String,Object> row = result.next();
+//               
+//                String rows = "";
+//                for ( Entry<String,Object> column : row.entrySet() )
+//                {
+//                    rows += column.getValue();
+//                    resultList.add(rows);
+//                }
+//            }
+//
+//            tx.success();
+//            }
     
         
     }
@@ -594,17 +636,18 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @return array of strings
      */
     
-    private String[] getNode2IDs(String ID1, String relType, String node2name){
-        if(!ID1.equals(" ")&& !node2name.equals(" ")&& !relType.equals(" ")){
-                       
+    private String[] getNode2IDs(String ID1, String relType, String node2name)
+    {
+        if(!ID1.equals(" ")&& !node2name.equals(" ")&& !relType.equals(" "))
+        {          
             String queryString = "match (n1)-[r:"+relType+"]->(n2) where n1.ID = '"+ID1+"' and n2.name = '"+node2name+"' return n2.ID";   
-            
+
             return getQueryResults(queryString);
-            
-        }              
-  
-        else 
+        }
+        else
+        {
             return new String[]{" "};
+        }
     }
     
     /**
@@ -613,8 +656,8 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param nodeID 
      */
     
-    private void updateNodePropertyValues(String nodeType, String nodeID){
-       
+    private void updateNodePropertyValues(String nodeType, String nodeID)
+    {
         String[] props = getPropertyTypesfromID(nodeID);    
         String[] currentVals = new String[props.length];
         
@@ -625,10 +668,9 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         
         PropertyDialog p = new PropertyDialog(this, true, "Node",nodeType, props, currentVals); 
         String[] newVals = p.showDialog();
-                
        
-        for (int i = 0; i<props.length; i++){
-
+        for (int i = 0; i<props.length; i++)
+        {
             updateNodePropertyValue(nodeID, props[i], newVals[i]);
         }   
         
@@ -641,21 +683,11 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param propertyType
      * @param newValue 
      */
-    
     private void updateNodePropertyValue(String nodeID, String propertyType, String newValue)
     {
-      
-        try ( Transaction tx = graphDb.beginTx() )
-                    {
-                            String query = "match (node1) where node1.ID = '"+nodeID+ "' set node1."+propertyType+" = '"+newValue +"'";
-                         graphDb.execute( query) ;
-       
-                         tx.success();
-     
-                        jTextPane1.setText(jTextPane1.getText()+"\n Updated a node property: Node: "+nodeID+" Property: "+propertyType+" New value: "+newValue);
-   
-                    }
-                    
+        session.run( "match (node1) where node1.ID = '"+nodeID+ "' set node1."+propertyType+" = '"+newValue +"'" ) ;
+
+        jTextPane1.setText(jTextPane1.getText()+"\n Updated a node property: Node: "+nodeID+" Property: "+propertyType+" New value: "+newValue); 
     }
     
     /**
@@ -666,22 +698,13 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param propertyType
      * @param newValue 
      */
-    
     private void updateRelationshipPropertyValue(String node1ID, String node2ID, String relType, String propertyType, String newValue)
     {
-      try ( Transaction tx = graphDb.beginTx() )
-                    {
-                           
-                            String matchString = "match (node1)- [r:"+relType+"]-> (node2) ";
-                             String whereString = " where node1.ID = '"+node1ID+"' and node2.ID = '"+node2ID+"' ";
-                            String setString = " set r."+propertyType+" = '"+newValue +"'";
-                            System.out.println(matchString+whereString+setString);
-                         graphDb.execute( matchString+whereString+setString) ;
-       
-                         tx.success();
-   
-   
-                    }  
+        String matchString = "match (node1)- [r:"+relType+"]-> (node2) ";
+        String whereString = " where node1.ID = '"+node1ID+"' and node2.ID = '"+node2ID+"' ";
+        String setString = " set r."+propertyType+" = '"+newValue +"'";
+        System.out.println(matchString+whereString+setString);
+        session.run( matchString+whereString+setString);
     }
     
 /**
@@ -692,181 +715,145 @@ public class GraphDatabaseForm extends javax.swing.JFrame
    
     private String[][] getNodeSurroundings(String ID)
     {
-        
-        
         String queryString = "match (n1) where n1.ID = '"+ID+"' return n1.name"; 
         String[] returned = getQueryResults(queryString);
         String nodeName = returned[0];
-        String[][] results1;
-        String[][] results2;
-       
+        String[][] arrayResults1;
+        String[][] arrayResults2;
       
-        if(!ID.equals(" ")){
-            
+        if(!ID.equals(" "))
+        {
             String rows = "";
             queryString = "match (n1)-[r]-(n2) where n1.ID = '"+ID+"' return n2.ID, n2.name, type(r)"; 
             
-            try ( Transaction tx = graphDb.beginTx();
-             
-            Result result = graphDb.execute( queryString ) )
+            StatementResult result = session.run( queryString );
             {
                 while ( result.hasNext() )
-            {
-                     Map<String,Object> row = result.next();
-                     for ( Entry<String,Object> column : row.entrySet() )
-                     {
-                                                 rows += column.getValue() + "; ";
-                     }
+                {
+                    Record record = result.next();
+                    Map<String,Object> row = record.asMap();
+                    for ( Entry<String,Object> column : row.entrySet() )
+                    {
+                        rows += column.getValue() + "; ";
+                    }
                    
-             }
-              
-                 
-                 String[] newOne = rows.split(";");
-                 
+                }
                 
-                 int numberOfSurroundingNodes = newOne.length/3;
+                String[] newOne = rows.split(";");
+                int numberOfSurroundingNodes = newOne.length/3;
                   
-                 String[][] res = new String[numberOfSurroundingNodes+1][5];//result format: node1ID ;node1name ;node2ID ;node2name ;relationshipType
-                 res[0][0] = ID;
-                 res[0][1] = nodeName;
-                 res[0][2] = "";
-                 res[0][3] = "";
-                 res[0][4] = "";
+                String[][] res = new String[numberOfSurroundingNodes+1][5];//result format: node1ID ;node1name ;node2ID ;node2name ;relationshipType
+                res[0][0] = ID;
+                res[0][1] = nodeName;
+                res[0][2] = "";
+                res[0][3] = "";
+                res[0][4] = "";
                  
-                 
-                 for (int i = 1;i<numberOfSurroundingNodes+1; i++)
-                 {
-                     res[i][0] = ID;//node 1 ID
-              
-                     res[i][1] = nodeName;//node 1 name
-                 
-                     res[i][2] = newOne[3*(i-1)+2].trim();//node 2 ID
-                     
-                     res[i][3] = newOne[3*(i-1)].trim();//node 2 name
-                 
-                     res[i][4] = newOne[3*(i-1)+1].trim();// relationship type
-                 
-                 }
-                 
-                           
-                                 
-                tx.success();
+                for (int i = 1;i<numberOfSurroundingNodes+1; i++)
+                {
+                    res[i][0] = ID;//node 1 ID
+
+                    res[i][1] = nodeName;//node 1 name
+
+                    res[i][2] = newOne[3*(i-1)+2].trim();//node 2 ID
+
+                    res[i][3] = newOne[3*(i-1)].trim();//node 2 name
+
+                    res[i][4] = newOne[3*(i-1)+1].trim();// relationship type
+                }
                 
-                results1 = res;
-                
-            }
+                arrayResults1 = res;
             
-            rows = "";
-            queryString = "match (n1)-[r]-(n2)-[r2]-(n3) where n1.ID = '"+ID+"' return n2.ID,n2.name, n3.ID,n3.name, type(r2)"; 
-            
-            try ( Transaction tx = graphDb.beginTx();
-             
-            Result result = graphDb.execute( queryString ) )
-            {
-                while ( result.hasNext() )
-            {
-                     Map<String,Object> row = result.next();
-                     for ( Entry<String,Object> column : row.entrySet() )
-                     {
-                                                 rows += column.getValue() + "; ";
-                     }
-                   
-             }
-                 System.out.println(rows);
-                 
-                 String[] newOne = rows.split(";");
-                                 
-                 int numberOfSurroundingNodes = newOne.length/5;
-                  
-                 String[][] res = new String[numberOfSurroundingNodes][5];
+                rows = "";
+                queryString = "match (n1)-[r]-(n2)-[r2]-(n3) where n1.ID = '"+ID+"' return n2.ID,n2.name, n3.ID,n3.name, type(r2)"; 
                 
-                 
-                 for (int i = 0;i<numberOfSurroundingNodes; i++)
-                 {
-                     res[i][0] = newOne[5*(i)].trim();//node 2 ID
-              
-                     res[i][1] = newOne[5*(i)+2].trim();// node 2 name
-                 
-                     res[i][2] = newOne[5*(i)+1].trim();//node 3 ID
-                     
-                     res[i][3] = newOne[5*(i)+4].trim();//node 3 name
-                 
-                     res[i][4] = newOne[5*(i)+3].trim();//rel type
-                 
-                 }
-                 
-                              
-                                 
-                tx.success();
-                
-                
-                results2 = res;
-               
+                StatementResult result2 = session.run( queryString );
+
+                while ( result2.hasNext() )
+                {
+                    Record record = result2.next();
+                    Map<String,Object> row = record.asMap();
+                    for ( Entry<String,Object> column : row.entrySet() )
+                    {
+                        rows += column.getValue() + "; ";
+                    }
+                }
+                System.out.println(rows);
+
+                String[] newOne2 = rows.split(";");
+
+                int numberOfSurroundingNodes2 = newOne2.length/5;
+
+                String[][] res2 = new String[numberOfSurroundingNodes2][5];
+
+
+                for (int i = 0;i<numberOfSurroundingNodes2; i++)
+                {
+                    res2[i][0] = newOne2[5*(i)].trim();//node 2 ID
+
+                    res2[i][1] = newOne2[5*(i)+2].trim();// node 2 name
+
+                    res2[i][2] = newOne2[5*(i)+1].trim();//node 3 ID
+
+                    res2[i][3] = newOne2[5*(i)+4].trim();//node 3 name
+
+                    res2[i][4] = newOne2[5*(i)+3].trim();//rel type
+
+                }
+                arrayResults2 = res2;
             }
-           String[][] results = (String[][]) ArrayUtils.addAll(results1, results2);
-           return results;
+            String[][] results = (String[][]) ArrayUtils.addAll(arrayResults1, arrayResults2);
+            return results;
         }
-        else{
+        else
+        {
             return new String[][]{{"", "", ""},{"", "", ""}};
-            
         }
-           
     }
+    
+    
   /**
    * getAllNodes: used for displaying graph. Get all node IDs+names in current graph.
    * @return node ID, node name, node type
    */
     private String[][] getAllNodes()
     {
-       String queryString = "match (n) return n.ID, n.name, labels(n)";
-             
-       
-       try ( Transaction tx = graphDb.beginTx();
-            Result result = graphDb.execute( queryString ) )
+        String queryString = "match (n) return n.ID, n.name, labels(n)";
+        StatementResult result = session.run( queryString );
+        {
+            String rows = "";
+            while( result.hasNext() )
             {
-                 String rows = "";
-                while ( result.hasNext() )
-            {
-                     Map<String,Object> row = result.next();
-                     for ( Entry<String,Object> column : row.entrySet() )
-                     {
-                            
-                            rows += column.getValue() + "; ";
-        
-                     }
-                   
-             }
-                                 
-                 String[] newOne = rows.split(";");
-                 
-                
-                 int numberOfNodes = newOne.length/3;
-                  
-                 String[][] res = new String[numberOfNodes][3];
-                 String origName = "";
-
-                 
-                 for (int i = 0;i<numberOfNodes; i++)
-                 {
-                     res[i][0] = newOne[3*(i)].trim();//node ID?
-              
-                     res[i][1] = newOne[3*(i)+2].trim();//node name?
-                     
-                     origName = newOne[3*(i)+1];
-                     origName = origName.replace("[","");
-                     origName = origName.replace("]","");
-                 
-                     res[i][2] = origName.trim();// type of node with brackets removed
-                 
-                 }
-                 
-                tx.success();
-                
-                
-                return res;
-                
+                Record record = result.next();
+                Map<String,Object> row = record.asMap();
+                for ( Entry<String,Object> column : row.entrySet() )
+                {
+                    rows += column.getValue() + "; ";
+                }
             }
-        }
+            String[] newOne = rows.split(";");
+            
+            int numberOfNodes = newOne.length/3;
+
+            String[][] res = new String[numberOfNodes][3];
+            String origName = "";
+            
+            for (int i = 0;i<numberOfNodes; i++)
+            {
+                res[i][0] = newOne[3*(i)].trim();//node ID?
+
+                res[i][1] = newOne[3*(i)+2].trim();//node name?
+
+                origName = newOne[3*(i)+1];
+                origName = origName.replace("[","");
+                origName = origName.replace("]","");
+
+                res[i][2] = origName.trim();// type of node with brackets removed
+            }
+            
+            return res;
+       }
+   }
        
         
    /**
