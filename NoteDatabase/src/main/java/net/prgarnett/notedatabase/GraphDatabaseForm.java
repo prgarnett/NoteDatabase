@@ -52,14 +52,11 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         
 	try
         {
-            int i = 0;
             br = new BufferedReader(new FileReader(csvFile));
             while ((line = br.readLine()) != null)
             {
                 String[] s = line.split(",");
                 stringList.add(new ArrayList<>(Arrays.asList(s)));
-                
-                i++;
             }
 	}
         catch (FileNotFoundException e)
@@ -137,31 +134,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
             }
         }
         allNodeIDs.removeAll(Collections.singleton("null"));
-        java.util.Collections.sort(allNodeIDs);  
-        
-//        try ( Transaction tx = graphDb.beginTx() )
-//        {
-//         
-//            
-//            Result result = driver.graphDb.execute( "match (n) return n.ID" ) ;
-//     
-//                           
-//            while ( result.hasNext() )
-//                {
-//                       Map<String,Object> row = result.next();
-//            
-//                       String rows = "";
-//                        for ( Entry<String,Object> column : row.entrySet() )
-//                         {
-//                            rows += column.getValue();
-//                                                      
-//                            allNodeIDs.add(rows);
-//                                                       
-//                          }
-//            }
-//
-//            tx.success();
-//        } 
+        java.util.Collections.sort(allNodeIDs);
     }
    /**
     * getNewID: find an unused ID by finding largest current ID and adding 1
@@ -218,10 +191,6 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         
         driver = GraphDatabase.driver( DB_STRING, AuthTokens.basic( "neo4j", "Nufoa23" ));
         session = driver.session();
-//         
-//        //Make new graph database service
-//             graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(DB_STRING);
-//       registerShutdownHook(graphDb); 
        
        //put all of the current node IDs into a list
         setAllNodeIDs();
@@ -288,10 +257,10 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     
     private void refreshCurrentRelationshipPanel()
     {
-       ComboBoxRelationship1.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipTypes(ComboBoxType2.getSelectedItem().toString())));
-       ComboBoxProperty3.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipProperties(ComboBoxRelationship1.getSelectedItem().toString())));
-       TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), 
-               ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(),  ComboBoxProperty3.getSelectedItem().toString())[0]);
+        ComboBoxRelationship1.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipTypes(ComboBoxType2.getSelectedItem().toString())));
+        ComboBoxProperty3.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipProperties(ComboBoxRelationship1.getSelectedItem().toString())));
+        TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), 
+        ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(),  ComboBoxProperty3.getSelectedItem().toString())[0]);
     }
     
     /**
@@ -300,9 +269,9 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     
     private void refreshCreateRelationshipPanel()
     {
-       ComboBoxRelationship2.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipTypes(ComboBoxType2.getSelectedItem().toString())));
-       ComboBoxProperty4.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipProperties(ComboBoxRelationship2.getSelectedItem().toString())));
-       TextField4.setText("");//empty for new relationship
+        ComboBoxRelationship2.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipTypes(ComboBoxType2.getSelectedItem().toString())));
+        ComboBoxProperty4.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipProperties(ComboBoxRelationship2.getSelectedItem().toString())));
+        TextField4.setText("");//empty for new relationship
     }
     
     /**
@@ -311,10 +280,10 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     
     private void refreshNode2Panel1()
     {
-       ComboBoxType3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Types(ComboBoxRelationship1.getSelectedItem().toString())));
-       ComboBoxName3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Names(ComboBoxID1.getSelectedItem().toString(), 
+        ComboBoxType3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Types(ComboBoxRelationship1.getSelectedItem().toString())));
+        ComboBoxName3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Names(ComboBoxID1.getSelectedItem().toString(), 
                ComboBoxRelationship1.getSelectedItem().toString())));
-       ComboBoxID2.setModel(new javax.swing.DefaultComboBoxModel(getNode2IDs(ComboBoxID1.getSelectedItem().toString(), 
+        ComboBoxID2.setModel(new javax.swing.DefaultComboBoxModel(getNode2IDs(ComboBoxID1.getSelectedItem().toString(), 
                ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxName3.getSelectedItem().toString())));
     }
     
@@ -327,7 +296,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         ComboBoxType4.setModel(new javax.swing.DefaultComboBoxModel(getNode2Types(ComboBoxRelationship2.getSelectedItem().toString())));
         ComboBoxName4.setModel(new javax.swing.DefaultComboBoxModel(getNodeNames(ComboBoxType4.getSelectedItem().toString()))); 
         ComboBoxID3.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType4.getSelectedItem().toString(), 
-                ComboBoxName4.getSelectedItem().toString())));
+        ComboBoxName4.getSelectedItem().toString())));
     }
       
       /**
@@ -336,12 +305,12 @@ public class GraphDatabaseForm extends javax.swing.JFrame
       
     private void refreshPanels()
     {
-       refreshCurrentRelationshipPanel();
-       refreshNode2Panel1();
-       TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
-       refreshCreateRelationshipPanel();
-       refreshNode2Panel2();
-      }
+        refreshCurrentRelationshipPanel();
+        refreshNode2Panel1();
+        TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
+        refreshCreateRelationshipPanel();
+        refreshNode2Panel2();
+    }
     
     /**
      * 
@@ -396,27 +365,6 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         {
             return new String[]{" "};
         }
-        
-//        try ( Transaction tx = graphDb.beginTx() )
-//        {
-//            Result result = graphDb.execute( queryString ) ;
-//         
-//            while ( result.hasNext() )
-//            {
-//               Map<String,Object> row = result.next();
-//               
-//                String rows = "";
-//                for ( Entry<String,Object> column : row.entrySet() )
-//                {
-//                    rows += column.getValue();
-//                    resultList.add(rows);
-//                }
-//            }
-//
-//            tx.success();
-//            }
-    
-        
     }
     
     /**
@@ -838,7 +786,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
             int numberOfNodes = newOne.length/3;
 
             String[][] res = new String[numberOfNodes][3];
-            String origName = "";
+            String origName;
             
             for (int i = 0;i<numberOfNodes; i++)
             {
@@ -882,9 +830,9 @@ public class GraphDatabaseForm extends javax.swing.JFrame
                                  
             String[] newOne = rows.split(";");
 
-            for (int j = 0;j<newOne.length;j++)
+            for (String newOne1 : newOne)
             {
-                System.out.println(newOne[j]);
+                System.out.println(newOne1);
             }
 
             int numberOfRels = newOne.length/3;
@@ -1296,7 +1244,6 @@ public class GraphDatabaseForm extends javax.swing.JFrame
             textOut.print(initialText+javaScriptText1+javaScriptText2+finalText);
             textOut.flush();
         }
-
     }
     
     
@@ -1845,7 +1792,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
                         .addComponent(ButtonCreateRelationship, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(ButtonAddProperty2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(ButtonClearProperties2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ButtonAddAllProperties2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, Short.MAX_VALUE)))
+                        .addComponent(ButtonAddAllProperties2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(0, 28, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -2043,6 +1990,11 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         );
 
         TextFieldLoadDB.setText("D:\\Databases\\JTSDatabase");
+        TextFieldLoadDB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextFieldLoadDBActionPerformed(evt);
+            }
+        });
 
         ButtonBrowseDB.setText("Browse");
         ButtonBrowseDB.addActionListener(new java.awt.event.ActionListener() {
@@ -2402,8 +2354,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     private void ButtonAddNodesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddNodesActionPerformed
      
         ArrayList<ArrayList<String>> nodes = getValuesFromCSV(TextFieldLoadNodes.getText());
-         
-       
+        
         for(int i=0; i<nodes.size(); i++)//for each row of file
         {
             int rowLength = nodes.get(i).size();
@@ -2497,9 +2448,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
             {
                 System.out.println("Invalid row in file. Each row needs at least 3 values: ID1, ID2, relationship type.");
             }
-                     
        }
-      
     }//GEN-LAST:event_ButtonAddRelationshipsActionPerformed
 
     /**
@@ -2756,15 +2705,15 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         // TODO add your handling code here:
         String[][] graphNodes = getAllNodes();
         
-        for (int i = 0; i<graphNodes.length; i++)
+        for (String[] graphNode : graphNodes)
         {
-            System.out.println(":"+graphNodes[i][0]+":"+graphNodes[i][1]+":"+graphNodes[i][2]);
+            System.out.println(":" + graphNode[0] + ":" + graphNode[1] + ":" + graphNode[2]);
         }
         String[][] graphRelationships = getAllRelationships();
         
-        for (int i = 0; i<graphRelationships.length; i++)
+        for (String[] graphRelationship : graphRelationships)
         {
-            System.out.println(":"+graphRelationships[i][0]+":"+graphRelationships[i][1]+":"+graphRelationships[i][2]);
+            System.out.println(":" + graphRelationship[0] + ":" + graphRelationship[1] + ":" + graphRelationship[2]);
         }
         //write javascript to make mini graph...
         try
@@ -2788,6 +2737,10 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         }
     }//GEN-LAST:event_ButtonViewGraphActionPerformed
 
+    private void TextFieldLoadDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextFieldLoadDBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextFieldLoadDBActionPerformed
+
     
     
     /**
@@ -2795,21 +2748,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      */
     public static void main(String args[]) 
     {
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(GraphDatabaseForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(() -> {
-//            new GraphDatabaseForm().setVisible(true);
-//        });
+        
     }
 
     //private AutocompleteJComboBox AutoCompleteCombo1;

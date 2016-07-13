@@ -1094,6 +1094,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="D:\u005cDatabases\u005cJTSDatabase" containsInvalidXMLChars="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TextFieldLoadDBActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="ButtonBrowseDB">
       <Properties>

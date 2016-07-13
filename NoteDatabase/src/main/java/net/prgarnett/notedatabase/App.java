@@ -5,6 +5,7 @@
  */
 package net.prgarnett.notedatabase;
 
+import javax.swing.JScrollPane;
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
@@ -43,8 +44,11 @@ public class App
             java.util.logging.Logger.getLogger(GraphDatabaseForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
+        JScrollPane scrPane = new JScrollPane();
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
+            graphForm.add(scrPane);
             graphForm.setVisible(true);
         });
     }
