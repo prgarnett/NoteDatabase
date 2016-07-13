@@ -83,14 +83,14 @@ public class GraphDatabaseForm extends javax.swing.JFrame
                 }
             }
 	}
- 
 	return stringList;
     }
-      /**
-       * createMapFromLists: converts 2D arraylist of strings into maps. e.g. each node type as a key and its properties as values
-       * @param nodeVals
-       * @return 
-       */  
+    
+    /**
+     * createMapFromLists: converts 2D arraylist of strings into maps. e.g. each node type as a key and its properties as values
+     * @param nodeVals
+     * @return 
+     */  
     private HashMap<String, String[]>  createMapFromLists(ArrayList<ArrayList<String>> nodeVals)
     {
         HashMap<String, String[]> map = new HashMap<>();
@@ -227,7 +227,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         setAllNodeIDs();
        
        //Display new database in text area
-       jTextPane1.setText(jTextPane1.getText()+"\n Set database to: "+graphDb.toString());
+       jTextPane1.setText(jTextPane1.getText()+"\n Set database to: " + DB_STRING);
        
        //Load from 4 csv files in current database folder. These are: 1. Nodes to properties 2. Relationships to properties 3. Node to relationships 4. Relationship to nodes
        ArrayList<ArrayList<String>> nodeVals = getValuesFromCSV(DB_STRING+"\\NodeProperties.csv");
@@ -425,20 +425,18 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @return array of strings
      */
     
-    private String[] getNodeNames (String nodeType){
-        
-        if(!nodeType.equals(" ")){
-                       
+    private String[] getNodeNames (String nodeType)
+    {    
+        if(!nodeType.equals(" "))
+        {
             String queryString = "match (n:"+nodeType+") return n.name";   
             
             return getQueryResults(queryString);
-            
-        }              
-  
-        else 
+        }
+        else
+        {
             return new String[]{" "};
-              
-        
+        }
     }
     
     /**
@@ -448,19 +446,18 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @return array of strings
      */
     
-    private String[] getNodeIDs (String nodeType, String nodeName){
-        
-    
-        if(!nodeType.equals(" ")&& !nodeName.equals(" ")){
-                       
+    private String[] getNodeIDs (String nodeType, String nodeName)
+    {
+        if(!nodeType.equals(" ")&& !nodeName.equals(" "))
+        {
             String queryString = "match (n:"+nodeType+") where n.name = '"+nodeName+"'return n.ID";   
             
             return getQueryResults(queryString);
-            
-        }              
-  
-        else 
+        }
+        else
+        {
             return new String[]{" "};
+        }
     }
     
     /**
@@ -468,47 +465,44 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param ID
      * @return array of strings
      */
-    private String[] getPropertyTypesfromID (String ID){
+    private String[] getPropertyTypesfromID (String ID)
+    {
+        ArrayList<String> resultList = new ArrayList<>();
         
-        
-     ArrayList<String> resultList = new ArrayList<>();
-        
-        if(!ID.equals(" ")){
-            
-            try ( Transaction tx = graphDb.beginTx() )
-            {
-            Result result = graphDb.execute( "match (n {ID: '"+ID+"'}) return n" ) ;
-      
-           List<String> columns = result.columns();
-            
-
-            Iterator<Node> n_column = result.columnAs( "n" );
-            
-            for ( Node node : IteratorUtil.asIterable( n_column ) )
-                {
-               resultList = (ArrayList<String>) node.getPropertyKeys();
-                       
-            }
-            
-              tx.success();
-              
-              resultList.remove("ID");
-            
-            java.util.Collections.sort(resultList);
-                   
-            String[] returnList = resultList.toArray(new String[resultList.size()]);
-             
-            if(returnList.length>0){
-                 return returnList;}
-            else
-                            return new String[]{" "};
+        if(!ID.equals(" "))
+        {
+            StatementResult result = session.run( "match (n {ID: '"+ID+"'}) return n" );
                 
+            while ( result.hasNext() )
+            {
+                Record record = result.next();
+                Map<String,Object> row = record.asMap();
+
+                for ( Entry<String,Object> column : row.entrySet() )
+                {
+                    resultList.add(column.getKey());
+                }
             }
-            
-        }              
-  
-        else 
+
+            resultList.remove("ID");
+
+            java.util.Collections.sort(resultList);
+
+            String[] returnList = resultList.toArray(new String[resultList.size()]);
+
+            if(returnList.length>0)
+            {
+                 return returnList;
+            }
+            else
+            {
+                return new String[]{" "};
+            }
+        }
+        else
+        {
             return new String[]{" "};
+        }
     }
     
     /**
@@ -518,18 +512,18 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @return array of Strings (should only contain one)
      */
     
-    private String[] getNodePropertyValue(String propertyType, String ID){
-     
-        if(!propertyType.equals(" ")&& !ID.equals(" ")){
-                       
+    private String[] getNodePropertyValue(String propertyType, String ID)
+    {
+        if(!propertyType.equals(" ")&& !ID.equals(" "))
+        {
             String queryString = "match (n) where n.ID = '"+ID+"' return n."+propertyType;   
             
             return getQueryResults(queryString);
-            
-        }              
-  
-        else 
+        }
+        else
+        {
             return new String[]{" "};
+        }
     }
     
     /**
@@ -537,18 +531,18 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param nodeType
      * @return array of Strings
      */
-    private String[] getRelationshipTypes(String nodeType){
-        
+    private String[] getRelationshipTypes(String nodeType)
+    {
         String[] res = nodeRelationships.get(nodeType);   
         String[] emp = {" "};
-        if(res!=null){
-                         return res;
+        if(res!=null)
+        {
+            return res;
         }
-        else{
-           
-                return emp;
+        else
+        {
+            return emp;
         }
-           
     }
     
     /**
@@ -557,17 +551,19 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @return array of strings
      */
     
-    private String[] getRelationshipProperties(String relType){
-        
-       
+    private String[] getRelationshipProperties(String relType)
+    {
         String[] res = relationshipProperties.get(relType);
-          String[] emp = {" "};
+        String[] emp = {" "};
         if(res!=null)
-        {             return res;
+        {
+            return res;
         }
-        else{
-            return emp;}
+        else
+        {
+            return emp;
         }
+    }
     
     /**
      * getRelationshipPropertyValue: find the value of a particular relationship property, given both node IDs and property type
@@ -578,17 +574,19 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @return array of strings
      */
     
-    private String[] getRelationshipPropertyValue(String ID1, String ID2, String RelType, String propType){
-         if(!ID1.equals(" ")&& !ID2.equals(" ")&& !RelType.equals(" ")&& !propType.equals(" ")){
-                       
+    private String[] getRelationshipPropertyValue(String ID1, String ID2, String RelType, String propType)
+    {
+        if(!ID1.equals(" ")&& !ID2.equals(" ")&& !RelType.equals(" ")&& !propType.equals(" "))
+        {
             String queryString = "match (n1)-[r:"+RelType+"]-(n2) where n1.ID = '"+ID1+"' and n2.ID = '"+ID2+"' return r."+propType;   
             
-                       return  getQueryResults(queryString);
+            return  getQueryResults(queryString);
                    
-        }              
-  
-        else {
-            return new String[]{" "};}
+        }
+        else
+        {
+            return new String[]{" "};
+        }
     }
     
     /**
@@ -597,15 +595,18 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @return array of strings
      */
     
-    private String[] getNode2Types(String relType){
-        
+    private String[] getNode2Types(String relType)
+    {
         String[] res = relationshipNodes.get(relType);
         String[] emp = {" "};
-        if(res!=null){
+        if(res!=null)
+        {
             return res;
         }
-                else
+        else
+        {
             return emp;
+        }
     }
     
     /**
@@ -615,17 +616,18 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @return array of strings
      */
     
-    private String[] getNode2Names(String ID1, String relType){
-       if(!ID1.equals(" ")&& !relType.equals(" ")){
-                       
+    private String[] getNode2Names(String ID1, String relType)
+    {
+        if(!ID1.equals(" ")&& !relType.equals(" "))
+        {
             String queryString = "match (n1)-[r:"+relType+"]->(n2) where n1.ID = '"+ID1+"' return n2.name";   
             
             return getQueryResults(queryString);
-            
-        }              
-  
-        else 
+        }
+        else
+        {
             return new String[]{" "};
+        }
     }
     
     /**
@@ -2354,11 +2356,13 @@ public class GraphDatabaseForm extends javax.swing.JFrame
                 
         createRelationshipPropertyList.clear();
         
-         for (int i = 0; i<props.length; i++){
+        for (int i = 0; i<props.length; i++)
+        {
             String[] s = {props[i],vals[i]};
-        createRelationshipPropertyList.add(s);
+            createRelationshipPropertyList.add(s);
         } 
-          jTextPane1.setText(jTextPane1.getText()+"\n Added "+props.length+" new relationship properties.");
+        
+        jTextPane1.setText(jTextPane1.getText()+"\n Added "+props.length+" new relationship properties.");
     }//GEN-LAST:event_ButtonAddAllProperties2ActionPerformed
 
 
@@ -2378,15 +2382,18 @@ public class GraphDatabaseForm extends javax.swing.JFrame
  * @param evt 
  */
     private void ButtonBrowse1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonBrowse1ActionPerformed
+        
         int returnVal =FileChooser.showOpenDialog(this);
-    if (returnVal == JFileChooser.APPROVE_OPTION) {
-        File file = FileChooser.getSelectedFile();
-     
-                 TextFieldLoadNodes.setText(file.getAbsolutePath());
-       
-    } else {
-        System.out.println("File access cancelled by user.");
-    }
+    
+        if (returnVal == JFileChooser.APPROVE_OPTION) 
+        {
+            File file = FileChooser.getSelectedFile();
+            TextFieldLoadNodes.setText(file.getAbsolutePath());
+        }
+        else
+        {
+            System.out.println("File access cancelled by user.");
+        }
     }//GEN-LAST:event_ButtonBrowse1ActionPerformed
 /**
  * ButtonAddNodesActionPerformed:
@@ -2394,46 +2401,38 @@ public class GraphDatabaseForm extends javax.swing.JFrame
  */
     private void ButtonAddNodesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddNodesActionPerformed
      
-         ArrayList<ArrayList<String>> nodes = getValuesFromCSV(TextFieldLoadNodes.getText());
+        ArrayList<ArrayList<String>> nodes = getValuesFromCSV(TextFieldLoadNodes.getText());
          
        
         for(int i=0; i<nodes.size(); i++)//for each row of file
-       {
-           int rowLength = nodes.get(i).size();
-           if(rowLength>=4){
-                    String nodeID = nodes.get(i).get(0);
-                    String nodeType = nodes.get(i).get(1);
+        {
+            int rowLength = nodes.get(i).size();
+            if(rowLength>=4)
+            {
+                String nodeID = nodes.get(i).get(0);
+                String nodeType = nodes.get(i).get(1);
 
-                    String propertyString = "ID: '"+nodeID+"',";
-           
-                    int k = 2;
-                      for(int j=0; j<(rowLength-2)/2; j++)
-                    {
-                         propertyString = propertyString+nodes.get(i).get(k)+": '"+nodes.get(i).get(k+1)+"',";
-                        k+=2;
-              
-                    }
+                String propertyString = "ID: '"+nodeID+"',";
+
+                int k = 2;
+                
+                for(int j=0; j<(rowLength-2)/2; j++)
+                {
+                    propertyString = propertyString+nodes.get(i).get(k)+": '"+nodes.get(i).get(k+1)+"',";
+                    k+=2;
+                }
                      
-                      propertyString = propertyString.substring(0,propertyString.length()-1);//remove last comma
+                propertyString = propertyString.substring(0,propertyString.length()-1);//remove last comma
                       
-                    //make new node
-                    try ( Transaction tx = graphDb.beginTx() )
-                    {
-            
-                         graphDb.execute( "create (newNode:"+ nodeType+"{"+propertyString+"})") ;
-       
-                         tx.success();
-     
-                        jTextPane1.setText(jTextPane1.getText()+"\n Created new node: "+nodeType+" "+propertyString);
-                    }
-                    }
-           else
-           System.out.println("Invalid row in file. Each row needs at least 4 values: ID, node type, name, node name.");
-           
-                     
-       }
-      
-        
+                session.run( "create (newNode:"+ nodeType+"{"+propertyString+"})") ;
+                jTextPane1.setText(jTextPane1.getText()+"\n Created new node: "+nodeType+" "+propertyString);
+                    
+            }
+            else
+            {
+                System.out.println("Invalid row in file. Each row needs at least 4 values: ID, node type, name, node name.");
+            }      
+        }
     }//GEN-LAST:event_ButtonAddNodesActionPerformed
 
     /**
@@ -2442,14 +2441,16 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      */
     private void ButtonBrowse2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonBrowse2ActionPerformed
         int returnVal =FileChooser.showOpenDialog(this);
-    if (returnVal == JFileChooser.APPROVE_OPTION) {
-        File file = FileChooser.getSelectedFile();
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            File file = FileChooser.getSelectedFile();
      
-                 TextFieldLoadRelationships.setText(file.getAbsolutePath());
-       
-    } else {
-        System.out.println("File access cancelled by user.");
-    }
+            TextFieldLoadRelationships.setText(file.getAbsolutePath());
+        }
+        else
+        {
+            System.out.println("File access cancelled by user.");
+        }
     }//GEN-LAST:event_ButtonBrowse2ActionPerformed
 
     /**
@@ -2461,45 +2462,41 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         ArrayList<ArrayList<String>> relationships = getValuesFromCSV(TextFieldLoadRelationships.getText());
         
         for(int i=0; i<relationships.size(); i++)//for each row of file
-       {
-           int rowLength = relationships.get(i).size();
-           if(rowLength>=3){
-                    String ID1 = relationships.get(i).get(0);
-                    String ID2 = relationships.get(i).get(1);
-                    String relType = relationships.get(i).get(2);
+        {
+            int rowLength = relationships.get(i).size();
+            if(rowLength>=3)
+            {
+                String ID1 = relationships.get(i).get(0);
+                String ID2 = relationships.get(i).get(1);
+                String relType = relationships.get(i).get(2);
 
-                    String propertyString = "";
-           
-                    int k = 3;
-                     for(int j=0; j<(rowLength-3)/2; j++)
-                    {
-                         propertyString = propertyString+relationships.get(i).get(k)+": '"+relationships.get(i).get(k+1)+"',";
-                        k+=2;
-              
-                    }
-                     if(!propertyString.equals(""))
-                     {
-                      propertyString = propertyString.substring(0,propertyString.length()-1);//remove last comma
-                     }
+                String propertyString = "";
+
+                int k = 3;
+                for(int j=0; j<(rowLength-3)/2; j++)
+                {
+                    propertyString = propertyString+relationships.get(i).get(k)+": '"+relationships.get(i).get(k+1)+"',";
+                    k+=2;
+                }
+                if(!propertyString.equals(""))
+                {
+                    propertyString = propertyString.substring(0,propertyString.length()-1);//remove last comma
+                }
                       
-                    //make new relationship
-                    try ( Transaction tx = graphDb.beginTx() )
-                    {
-                            String matchString = "match (node1), (node2) ";
-                             String whereString = "where node1.ID = '"+ID1+"' and node2.ID = '"+ID2+"' ";
-                            String createString = "create (node1) - [r:"+relType + "{"+propertyString+"}]->(node2)";
-                            System.out.println(matchString+whereString+createString);
-                         graphDb.execute( matchString+whereString+createString) ;
-       
-                         tx.success();
-     
-                        jTextPane1.setText(jTextPane1.getText()+"\n Created new relationship: "+ID1+" - "+relType+" "+propertyString+ " -> "+ID2);
-   
-                    }
-                    }
-           else
-           System.out.println("Invalid row in file. Each row needs at least 3 values: ID1, ID2, relationship type.");
-           
+                //make new relationship
+                String matchString = "match (node1), (node2) ";
+                String whereString = "where node1.ID = '"+ID1+"' and node2.ID = '"+ID2+"' ";
+                String createString = "create (node1) - [r:"+relType + "{"+propertyString+"}]->(node2)";
+                System.out.println(matchString+whereString+createString);
+
+                session.run( matchString+whereString+createString) ;
+
+                jTextPane1.setText(jTextPane1.getText()+"\n Created new relationship: "+ID1+" - "+relType+" "+propertyString+ " -> "+ID2);
+            }
+            else
+            {
+                System.out.println("Invalid row in file. Each row needs at least 3 values: ID1, ID2, relationship type.");
+            }
                      
        }
       
@@ -2518,14 +2515,12 @@ public class GraphDatabaseForm extends javax.swing.JFrame
                 
         createNodePropertyList.clear();
         
-        for (int i = 0; i<props.length; i++){
+        for (int i = 0; i<props.length; i++)
+        {
             String[] s = {props[i],vals[i]};
-        createNodePropertyList.add(s);
+            createNodePropertyList.add(s);
         }   
-        
         jTextPane1.setText(jTextPane1.getText()+"\n Added "+props.length+" new node properties.");
-   
-  
     }//GEN-LAST:event_ButtonAddAllProperties1ActionPerformed
 
     /**
@@ -2533,8 +2528,9 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ComboBoxID1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxID1ActionPerformed
-       ComboBoxProperty2.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypesfromID(ComboBoxID1.getSelectedItem().toString())));
-       TextField2.setText(getNodePropertyValue(ComboBoxProperty2.getSelectedItem().toString(), ComboBoxID1.getSelectedItem().toString())[0]);
+        
+        ComboBoxProperty2.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypesfromID(ComboBoxID1.getSelectedItem().toString())));
+        TextField2.setText(getNodePropertyValue(ComboBoxProperty2.getSelectedItem().toString(), ComboBoxID1.getSelectedItem().toString())[0]);
        
         refreshPanels();
     }//GEN-LAST:event_ComboBoxID1ActionPerformed
@@ -2544,8 +2540,8 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ComboBoxProperty3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxProperty3ActionPerformed
+        
         TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
-      
     }//GEN-LAST:event_ComboBoxProperty3ActionPerformed
 
     /**
@@ -2553,10 +2549,10 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ComboBoxName3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxName3ActionPerformed
+        
         ComboBoxID2.setModel(new javax.swing.DefaultComboBoxModel(getNode2IDs(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxName3.getSelectedItem().toString())));
          //ComboBoxProperty3.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipProperties()));
         TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
-  
     }//GEN-LAST:event_ComboBoxName3ActionPerformed
 
   
@@ -2565,7 +2561,8 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     }//GEN-LAST:event_ComboBoxID3ActionPerformed
 
     private void ComboBoxName4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxName4ActionPerformed
-       ComboBoxID3.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType4.getSelectedItem().toString(), ComboBoxName4.getSelectedItem().toString())));
+        
+        ComboBoxID3.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType4.getSelectedItem().toString(), ComboBoxName4.getSelectedItem().toString())));
     }//GEN-LAST:event_ComboBoxName4ActionPerformed
 
     private void TextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextField3ActionPerformed
@@ -2573,8 +2570,8 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     }//GEN-LAST:event_TextField3ActionPerformed
 
     private void ComboBoxID2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxID2ActionPerformed
-         TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
-  
+        
+        TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
     }//GEN-LAST:event_ComboBoxID2ActionPerformed
 
     /**
@@ -2584,40 +2581,28 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     private void ButtonDeleteNodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDeleteNodeActionPerformed
         
         String ID1 = ComboBoxID1.getSelectedItem().toString();
-         if(!ID1.equals(" ")){
-                       
-            String queryString = "match (n)-[r]->() where n.ID = '"+ID1+"' return r";   
-            
+        if(!ID1.equals(" "))
+        {
+            String queryString = "match (n)-[r]->() where n.ID = '"+ID1+"' return r";
             String[] res = getQueryResults(queryString);//check for current relationships
-            
             queryString = "match ()-[r]->(n) where n.ID = '"+ID1+"' return r";   
-            
             String[] res2 = getQueryResults(queryString);//check for current relationships
             
-        
-        
-        if(res[0].equals(" ")&&res2[0].equals(" ")){
-            
-            try ( Transaction tx = graphDb.beginTx() )
-                {
-                       
-                    queryString = "match (n) where n.ID = '"+ID1+"' delete n";   
-            
-                    graphDb.execute(queryString);
-                    
-                     tx.success();
-                     
-                     jTextPane1.setText(jTextPane1.getText()+"\n Deleted node: "+ID1);
-                     refreshNode1Panel();
-                     refreshPanels();
-                }
-    
-             }
-        else
-          jTextPane1.setText(jTextPane1.getText()+"\n Cannot delete node - delete all current relationships first. ");
-  
-        }         
+            if(res[0].equals(" ")&&res2[0].equals(" "))
+            {
+                queryString = "match (n) where n.ID = '"+ID1+"' delete n";   
 
+                session.run(queryString);
+
+                jTextPane1.setText(jTextPane1.getText()+"\n Deleted node: "+ID1);
+                refreshNode1Panel();
+                refreshPanels();
+            }
+            else
+            {
+                jTextPane1.setText(jTextPane1.getText()+"\n Cannot delete node - delete all current relationships first. ");
+            }
+        }
     }//GEN-LAST:event_ButtonDeleteNodeActionPerformed
 
     /**
@@ -2625,33 +2610,26 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ButtonDeleteRelationshipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDeleteRelationshipActionPerformed
+        
         String ID1 = ComboBoxID1.getSelectedItem().toString();
         String ID2 = ComboBoxID2.getSelectedItem().toString();
         String relType = ComboBoxRelationship1.getSelectedItem().toString();
         
-        if(!ID1.equals(" ") && !ID2.equals(" ") && !relType.equals(" ")){
-            
-            try ( Transaction tx = graphDb.beginTx() )
-                {
-                       
-                    String queryString = "match (n1)-[r:"+relType+"]->(n2) where n1.ID = '"+ID1+"'and n2.ID = '"+ID2+"' delete r";   
-                    System.out.println("delete query: "+queryString);
-            
-                    graphDb.execute(queryString);
-                    
-                     tx.success();
-                     
-                     jTextPane1.setText(jTextPane1.getText()+"\n Deleted relationship: "+ID1+" - "+relType+" -> "+ID2);
-                     refreshNode1Panel();
-                     refreshPanels();
-                }
-    
-             }
+        if(!ID1.equals(" ") && !ID2.equals(" ") && !relType.equals(" "))
+        {
+            String queryString = "match (n1)-[r:"+relType+"]->(n2) where n1.ID = '"+ID1+"'and n2.ID = '"+ID2+"' delete r";   
+            System.out.println("delete query: "+queryString);
+
+            session.run(queryString);
+
+            jTextPane1.setText(jTextPane1.getText()+"\n Deleted relationship: "+ID1+" - "+relType+" -> "+ID2);
+            refreshNode1Panel();
+            refreshPanels();
+        }
         else
-          jTextPane1.setText(jTextPane1.getText()+"\n No relationship to delete. ");  
-            
-        
-    
+        {
+            jTextPane1.setText(jTextPane1.getText()+"\n No relationship to delete. ");  
+        }
     }//GEN-LAST:event_ButtonDeleteRelationshipActionPerformed
 
     /**
@@ -2659,11 +2637,10 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ButtonEditProperties1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditProperties1ActionPerformed
+        
         String nodeType =  ComboBoxType2.getSelectedItem().toString(); 
         String nodeID = ComboBoxID1.getSelectedItem().toString();
-       
         updateNodePropertyValues(nodeType, nodeID);
-       
     }//GEN-LAST:event_ButtonEditProperties1ActionPerformed
 
     /**
@@ -2675,10 +2652,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         String node1ID =  ComboBoxID1.getSelectedItem().toString(); 
         String node2ID = ComboBoxID2.getSelectedItem().toString();
         String relType = ComboBoxRelationship1.getSelectedItem().toString();
-        
-       
         String[] props = getRelationshipProperties(relType);
-                
         String[] currentVals = new String[props.length];
         
         for(int j = 0; j<props.length; j++)
@@ -2688,10 +2662,9 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         
         PropertyDialog p = new PropertyDialog(this, true, "Relationship",relType, props, currentVals); 
         String[] newVals = p.showDialog();
-                
        
-        for (int i = 0; i<props.length; i++){
-
+        for (int i = 0; i<props.length; i++)
+        {
             updateRelationshipPropertyValue(node1ID,node2ID,relType, props[i], newVals[i]);
         }   
         
@@ -2706,8 +2679,8 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         
         String nodeType =  ComboBoxType3.getSelectedItem().toString(); 
         String nodeID = ComboBoxID2.getSelectedItem().toString();
-       
         updateNodePropertyValues(nodeType, nodeID);
+        
     }//GEN-LAST:event_ButtonEditProperties3ActionPerformed
 
     /**
@@ -2715,10 +2688,11 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ButtonEditProperties4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditProperties4ActionPerformed
+        
         String nodeType =  ComboBoxType4.getSelectedItem().toString(); 
         String nodeID = ComboBoxID3.getSelectedItem().toString();
-       
         updateNodePropertyValues(nodeType, nodeID);
+        
     }//GEN-LAST:event_ButtonEditProperties4ActionPerformed
 
     /**
@@ -2726,15 +2700,17 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ButtonBrowseDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonBrowseDBActionPerformed
-      int returnVal =FileChooser.showOpenDialog(this);
-    if (returnVal == JFileChooser.APPROVE_OPTION) {
-        File file = FileChooser.getSelectedFile();
      
-                 TextFieldLoadDB.setText(file.getAbsolutePath());
-       
-    } else {
-        System.out.println("File access cancelled by user.");
-    }
+        int returnVal =FileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            File file = FileChooser.getSelectedFile();
+            TextFieldLoadDB.setText(file.getAbsolutePath());    
+        }
+        else
+        {
+            System.out.println("File access cancelled by user.");
+        }
     }//GEN-LAST:event_ButtonBrowseDBActionPerformed
 
     /**
@@ -2742,7 +2718,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ButtonLoadDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLoadDBActionPerformed
-       setNewDatabaseFields(TextFieldLoadDB.getText());
+        setNewDatabaseFields(TextFieldLoadDB.getText());
     }//GEN-LAST:event_ButtonLoadDBActionPerformed
 
     private void ButtonViewNodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonViewNodeActionPerformed
@@ -2754,18 +2730,24 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         String[][] result = getNodeSurroundings(currentNodeID);
         
         //write javascript to make mini graph...
-        try {
+        try
+        {
             writeHTMLFile(result);
-        } catch (FileNotFoundException ex) {
+        }
+        catch (FileNotFoundException ex)
+        {
             Logger.getLogger(GraphDatabaseForm.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
         String htmlFilePath = "\\graphdisplay.html"; 
         File htmlFile = new File(htmlFilePath);
-        try {
+        try
+        {
             Desktop.getDesktop().browse(htmlFile.toURI());
-        } catch (IOException ex) {
+        }
+        catch (IOException ex)
+        {
             System.out.println(ex.getMessage());
         }
     }//GEN-LAST:event_ButtonViewNodeActionPerformed
@@ -2785,18 +2767,23 @@ public class GraphDatabaseForm extends javax.swing.JFrame
             System.out.println(":"+graphRelationships[i][0]+":"+graphRelationships[i][1]+":"+graphRelationships[i][2]);
         }
         //write javascript to make mini graph...
-        try {
+        try
+        {
             writeHTMLFileForGraphDisplay(graphNodes,graphRelationships);
-        } catch (FileNotFoundException ex) {
+        }
+        catch (FileNotFoundException ex)
+        {
             Logger.getLogger(GraphDatabaseForm.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
         String htmlFilePath = "\\graphdisplay.html"; 
         File htmlFile = new File(htmlFilePath);
-        try {
+        try
+        {
             Desktop.getDesktop().browse(htmlFile.toURI());
-        } catch (IOException ex) {
+        }
+        catch (IOException ex)
+        {
             System.out.println(ex.getMessage());
         }
     }//GEN-LAST:event_ButtonViewGraphActionPerformed
