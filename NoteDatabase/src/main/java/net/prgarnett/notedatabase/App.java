@@ -21,13 +21,13 @@ public class App
     
     App()
     {
-        driver = GraphDatabase.driver( "bolt://localhost", AuthTokens.basic( "neo4j", "Nufoa23" ));
+        driver = GraphDatabase.driver( "bolt://sb11.stations.graphenedb.com:24786", AuthTokens.basic( "NotesDatabase", "jQxCrLUwRh3fkFGG9Rol" ));
         session = driver.session();
         
         registerShutdownHook(session, driver);
     }
     
-    private static void main(String args[])
+    public static void main(String args[])
     {
         App noteDatabase = new App();
         
