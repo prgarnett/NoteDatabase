@@ -5,6 +5,14 @@
  */
 package net.prgarnett.notedatabase;
 
+import java.awt.Container;
+import java.awt.Dimension;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
@@ -20,9 +28,24 @@ public class App
     private final Driver driver;
     private final Session session;   
     
-    App()
+    App(String pathname)
     {
-        driver = GraphDatabase.driver( "bolt://sb11.stations.graphenedb.com:24786", AuthTokens.basic( "NotesDatabase", "jQxCrLUwRh3fkFGG9Rol" ));
+        String database = "";
+        String password = "";
+        
+        try
+        {
+            File auth = new File(pathname);
+            Scanner lineScan = new Scanner(auth);
+            database = lineScan.nextLine();
+            password = lineScan.nextLine();
+        }
+        catch (FileNotFoundException e)
+        {
+            System.err.println("Auth File not present: " + e.getMessage());
+        }
+        
+        driver = GraphDatabase.driver( "bolt://sb11.stations.graphenedb.com:24786", AuthTokens.basic( database, password ));
         session = driver.session();
         
         registerShutdownHook(session, driver);
@@ -30,7 +53,7 @@ public class App
     
     public static void main(String args[])
     {
-        App noteDatabase = new App();
+        App noteDatabase = new App(args[0]);
         
         GraphDatabaseForm graphForm = new GraphDatabaseForm(noteDatabase.getDriver(), noteDatabase.getSession());
         try {
@@ -43,12 +66,31 @@ public class App
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GraphDatabaseForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-
-        JScrollPane scrPane = new JScrollPane();
+        
+        JFrame frame = new JFrame("ScrollDemo2");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        JComponent newContentPane = new NewNotePanel();
+        newContentPane.setOpaque(true); //content panes must be opaque
+        
+        JScrollPane scroller = new JScrollPane(newContentPane);
+        scroller.setPreferredSize(new Dimension(200,200));
+        
+        frame.setContentPane(scroller);
+ 
+        //Display the window.
+        frame.pack();
+        frame.setVisible(true);
+       
+        
+//        JPanel panel = new JPanel();
+//        Container c = graphForm.getContentPane();
+//
+//        JScrollPane jsp = new JScrollPane(panel);
+//        c.add(jsp);
         
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            graphForm.add(scrPane);
             graphForm.setVisible(true);
         });
     }

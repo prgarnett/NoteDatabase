@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JScrollPane;
 import org.apache.commons.lang3.ArrayUtils;
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
@@ -47,7 +48,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     {
 	String csvFile = filePath;
 	BufferedReader br = null;
-	String line = "";
+	String line;
 	ArrayList<ArrayList<String>> stringList = new ArrayList<>();
         
 	try
@@ -1271,12 +1272,13 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     private void initComponents() {
 
         FileChooser = new javax.swing.JFileChooser();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jPanel9 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         ComboBoxType2 = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         ButtonDeleteNode = new javax.swing.JButton();
         ComboBoxProperty2 = new javax.swing.JComboBox();
         TextField2 = new javax.swing.JTextField();
@@ -1285,14 +1287,6 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         ComboBoxID1 = new javax.swing.JComboBox();
         ButtonEditProperties1 = new javax.swing.JButton();
         ButtonViewNode = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        ComboBoxRelationship1 = new javax.swing.JComboBox();
-        ButtonDeleteRelationship = new javax.swing.JButton();
-        jLabel13 = new javax.swing.JLabel();
-        ComboBoxProperty3 = new javax.swing.JComboBox();
-        ButtonEditProperties2 = new javax.swing.JButton();
-        TextField3 = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         ComboBoxType3 = new javax.swing.JComboBox();
@@ -1301,20 +1295,14 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         jLabel17 = new javax.swing.JLabel();
         ComboBoxID2 = new javax.swing.JComboBox();
         ButtonEditProperties3 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
-        jPanel2 = new javax.swing.JPanel();
-        ComboBoxType1 = new javax.swing.JComboBox();
-        TextField1 = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        ComboBoxProperty1 = new javax.swing.JComboBox();
-        ButtonAddProperty1 = new javax.swing.JButton();
-        ButtonCreateNode = new javax.swing.JButton();
-        ButtonClearProperties1 = new javax.swing.JButton();
-        ButtonAddAllProperties1 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        ComboBoxRelationship1 = new javax.swing.JComboBox();
+        ButtonDeleteRelationship = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        ComboBoxProperty3 = new javax.swing.JComboBox();
+        ButtonEditProperties2 = new javax.swing.JButton();
+        TextField3 = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         ComboBoxRelationship2 = new javax.swing.JComboBox();
@@ -1333,6 +1321,10 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         jLabel18 = new javax.swing.JLabel();
         ComboBoxID3 = new javax.swing.JComboBox();
         ButtonEditProperties4 = new javax.swing.JButton();
+        ButtonViewGraph = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
         jPanel8 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
@@ -1343,12 +1335,27 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         TextFieldLoadRelationships = new javax.swing.JTextField();
         ButtonBrowse2 = new javax.swing.JButton();
         ButtonAddRelationships = new javax.swing.JButton();
-        TextFieldLoadDB = new javax.swing.JTextField();
-        ButtonBrowseDB = new javax.swing.JButton();
-        ButtonLoadDB = new javax.swing.JButton();
-        ButtonViewGraph = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        ComboBoxType1 = new javax.swing.JComboBox();
+        TextField1 = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        ComboBoxProperty1 = new javax.swing.JComboBox();
+        ButtonAddProperty1 = new javax.swing.JButton();
+        ButtonCreateNode = new javax.swing.JButton();
+        ButtonClearProperties1 = new javax.swing.JButton();
+        ButtonAddAllProperties1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane2.setAutoscrolls(true);
+
+        jPanel9.setAutoscrolls(true);
+        jPanel9.setPreferredSize(new java.awt.Dimension(1340, 800));
+        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Node 1", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
@@ -1363,8 +1370,6 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         jLabel4.setText("Node Name:");
 
         jLabel7.setText("Node Properties:");
-
-        jTextField2.setText("jTextField2");
 
         ButtonDeleteNode.setText("Delete Node");
         ButtonDeleteNode.addActionListener(new java.awt.event.ActionListener() {
@@ -1420,60 +1425,138 @@ public class GraphDatabaseForm extends javax.swing.JFrame
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(ComboBoxType2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(ButtonDeleteNode, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(ButtonViewNode, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(ButtonEditProperties1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel4)
-                            .addComponent(ComboBoxName1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(266, 266, 266)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel16)
-                    .addComponent(TextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
-                    .addComponent(ComboBoxProperty2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ComboBoxID1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel7))
+                        .addGap(280, 280, 280)
+                        .addComponent(ComboBoxType2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel16)
+                                    .addComponent(ComboBoxID1, 0, 250, Short.MAX_VALUE)
+                                    .addComponent(ComboBoxName1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(ComboBoxProperty2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(TextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(ButtonViewNode, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(ButtonEditProperties1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(ButtonDeleteNode, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 390, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(105, 105, 105)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ComboBoxType2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ComboBoxName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                .addContainerGap(11, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ComboBoxType2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ComboBoxName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel16)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ComboBoxID1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ComboBoxProperty2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ButtonEditProperties1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ButtonViewNode)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(ButtonDeleteNode)
-                .addGap(25, 25, 25))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ButtonDeleteNode))
         );
+
+        jPanel9.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 280, 400));
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Node 2", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
+
+        jLabel8.setText("Node Type:");
+
+        ComboBoxType3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxType3ActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setText("Node Name:");
+
+        ComboBoxName3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxName3ActionPerformed(evt);
+            }
+        });
+
+        jLabel17.setText("Node ID:");
+
+        ComboBoxID2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxID2ActionPerformed(evt);
+            }
+        });
+
+        ButtonEditProperties3.setText("Edit Properties");
+        ButtonEditProperties3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonEditProperties3ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel8))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(ComboBoxID2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(ComboBoxType3, 0, 250, Short.MAX_VALUE)
+                                .addComponent(ComboBoxName3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(ButtonEditProperties3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel17))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ComboBoxType3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ComboBoxName3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ComboBoxID2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ButtonEditProperties3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel9.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 10, 280, 250));
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Current Relationships", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
@@ -1518,10 +1601,10 @@ public class GraphDatabaseForm extends javax.swing.JFrame
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(ButtonDeleteRelationship)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap(9, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ButtonDeleteRelationship, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
                             .addComponent(jLabel13))
@@ -1531,8 +1614,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
                             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(ComboBoxProperty3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(ComboBoxRelationship1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(TextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(0, 26, Short.MAX_VALUE))
+                                .addComponent(TextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1549,192 +1631,12 @@ public class GraphDatabaseForm extends javax.swing.JFrame
                 .addComponent(TextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(ButtonEditProperties2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(ButtonDeleteRelationship)
                 .addContainerGap())
         );
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Node 2", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
-
-        jLabel8.setText("Node Type:");
-
-        ComboBoxType3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ComboBoxType3ActionPerformed(evt);
-            }
-        });
-
-        jLabel12.setText("Node Name:");
-
-        ComboBoxName3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ComboBoxName3ActionPerformed(evt);
-            }
-        });
-
-        jLabel17.setText("Node ID:");
-
-        ComboBoxID2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ComboBoxID2ActionPerformed(evt);
-            }
-        });
-
-        ButtonEditProperties3.setText("Edit Properties");
-        ButtonEditProperties3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonEditProperties3ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel17)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(ComboBoxType3, 0, 250, Short.MAX_VALUE)
-                        .addComponent(jLabel8)
-                        .addComponent(jLabel12)
-                        .addComponent(ComboBoxName3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ComboBoxID2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ButtonEditProperties3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ComboBoxType3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ComboBoxName3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel17)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ComboBoxID2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(ButtonEditProperties3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("Database:");
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Output", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
-
-        jScrollPane1.setViewportView(jTextPane1);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
-        );
-
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Node", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
-
-        ComboBoxType1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ComboBoxType1ActionPerformed(evt);
-            }
-        });
-
-        jLabel10.setText("Node Type:");
-
-        jLabel11.setText("Node Properties:");
-
-        ButtonAddProperty1.setText("Add Property");
-        ButtonAddProperty1.setActionCommand("Add Attribute");
-        ButtonAddProperty1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonAddProperty1ActionPerformed(evt);
-            }
-        });
-
-        ButtonCreateNode.setText("Create Node");
-        ButtonCreateNode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonCreateNodeActionPerformed(evt);
-            }
-        });
-
-        ButtonClearProperties1.setText("Clear Properties");
-        ButtonClearProperties1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonClearProperties1ActionPerformed(evt);
-            }
-        });
-
-        ButtonAddAllProperties1.setText("Add All Properties");
-        ButtonAddAllProperties1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonAddAllProperties1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(ButtonAddAllProperties1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel10)
-                        .addComponent(jLabel11)
-                        .addComponent(ComboBoxType1, 0, 250, Short.MAX_VALUE)
-                        .addComponent(ComboBoxProperty1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(TextField1))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(ButtonAddProperty1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ButtonCreateNode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ButtonClearProperties1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ComboBoxType1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ComboBoxProperty1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ButtonAddProperty1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ButtonAddAllProperties1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ButtonClearProperties1)
-                .addGap(37, 37, 37)
-                .addComponent(ButtonCreateNode)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanel9.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 10, 450, 250));
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Relationship", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
@@ -1778,27 +1680,30 @@ public class GraphDatabaseForm extends javax.swing.JFrame
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ComboBoxProperty4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ComboBoxRelationship2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(ButtonCreateRelationship, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ButtonAddProperty2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ButtonClearProperties2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ButtonAddAllProperties2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(0, 28, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addGap(28, 28, 28)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ComboBoxProperty4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ComboBoxRelationship2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 5, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ButtonAddProperty2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ButtonClearProperties2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ButtonAddAllProperties2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ButtonCreateRelationship))
+                .addGap(41, 41, 41))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(ComboBoxRelationship2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1808,16 +1713,17 @@ public class GraphDatabaseForm extends javax.swing.JFrame
                     .addComponent(ComboBoxProperty4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(TextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(ButtonAddProperty2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ButtonAddAllProperties2)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ButtonAddProperty2)
+                    .addComponent(ButtonAddAllProperties2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ButtonClearProperties2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(ButtonCreateRelationship)
-                .addContainerGap())
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ButtonClearProperties2)
+                    .addComponent(ButtonCreateRelationship)))
         );
+
+        jPanel9.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 260, 450, 240));
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Node 2", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
@@ -1858,42 +1764,76 @@ public class GraphDatabaseForm extends javax.swing.JFrame
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel18)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(ComboBoxType4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel15)
-                                    .addComponent(jLabel14)
-                                    .addComponent(ComboBoxType4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(ComboBoxName4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ComboBoxID3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ButtonEditProperties4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
+                                .addComponent(jLabel15)
+                                .addComponent(jLabel14)
+                                .addGroup(jPanel7Layout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(ButtonEditProperties4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(ComboBoxName4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(ComboBoxID3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel18)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addContainerGap()
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ComboBoxType4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel15)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ComboBoxName4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ComboBoxID3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ButtonEditProperties4)
+                .addContainerGap())
+        );
+
+        jPanel9.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 260, 280, 240));
+
+        ButtonViewGraph.setText("View Graph");
+        ButtonViewGraph.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonViewGraphActionPerformed(evt);
+            }
+        });
+        jPanel9.add(ButtonViewGraph, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 132, -1));
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Output", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
+
+        jScrollPane1.setViewportView(jTextPane1);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 928, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 14, Short.MAX_VALUE))
+        );
+
+        jPanel9.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 510, 960, 240));
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bulk Updates", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
@@ -1946,14 +1886,14 @@ public class GraphDatabaseForm extends javax.swing.JFrame
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addComponent(TextFieldLoadRelationships, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ButtonBrowse2, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE))
+                                .addComponent(ButtonBrowse2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addComponent(jLabel22)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addComponent(TextFieldLoadNodes, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ButtonBrowse1, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE))))
+                                .addComponent(ButtonBrowse1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1974,7 +1914,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TextFieldLoadNodes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ButtonBrowse1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addComponent(jLabel20)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ButtonAddNodes)
@@ -1986,149 +1926,133 @@ public class GraphDatabaseForm extends javax.swing.JFrame
                     .addComponent(ButtonBrowse2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(ButtonAddRelationships)
-                .addGap(370, 370, 370))
-        );
-
-        TextFieldLoadDB.setText("D:\\Databases\\JTSDatabase");
-        TextFieldLoadDB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TextFieldLoadDBActionPerformed(evt);
-            }
-        });
-
-        ButtonBrowseDB.setText("Browse");
-        ButtonBrowseDB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonBrowseDBActionPerformed(evt);
-            }
-        });
-
-        ButtonLoadDB.setText("Load");
-        ButtonLoadDB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonLoadDBActionPerformed(evt);
-            }
-        });
-
-        ButtonViewGraph.setText("View Graph");
-        ButtonViewGraph.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonViewGraphActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(TextFieldLoadDB, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(13, 13, 13)
-                                .addComponent(ButtonBrowseDB, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ButtonLoadDB, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(ButtonViewGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(TextFieldLoadDB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ButtonBrowseDB)
-                    .addComponent(ButtonLoadDB)
-                    .addComponent(ButtonViewGraph))
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)))
+
+        jPanel9.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 500, 330, 250));
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Create Node", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
+
+        ComboBoxType1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxType1ActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setText("Node Type:");
+
+        jLabel11.setText("Node Properties:");
+
+        ButtonAddProperty1.setText("Add Property");
+        ButtonAddProperty1.setActionCommand("Add Attribute");
+        ButtonAddProperty1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonAddProperty1ActionPerformed(evt);
+            }
+        });
+
+        ButtonCreateNode.setText("Create Node");
+        ButtonCreateNode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonCreateNodeActionPerformed(evt);
+            }
+        });
+
+        ButtonClearProperties1.setText("Clear Properties");
+        ButtonClearProperties1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonClearProperties1ActionPerformed(evt);
+            }
+        });
+
+        ButtonAddAllProperties1.setText("Add All Properties");
+        ButtonAddAllProperties1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonAddAllProperties1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(ButtonAddAllProperties1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel10)
+                        .addComponent(jLabel11)
+                        .addComponent(ComboBoxType1, 0, 250, Short.MAX_VALUE)
+                        .addComponent(ComboBoxProperty1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(TextField1))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(ButtonAddProperty1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ButtonCreateNode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ButtonClearProperties1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(ComboBoxType1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ComboBoxProperty1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ButtonAddProperty1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ButtonAddAllProperties1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ButtonClearProperties1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ButtonCreateNode))
         );
+
+        jPanel9.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, -1, 340));
+
+        jScrollPane2.setViewportView(jPanel9);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * customInitComponents
-    */
-    private void customInitComponents()
-    {
-        createNodePropertyList = new ArrayList<>();
-        createRelationshipPropertyList = new ArrayList<>();
-        FileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        this.setTitle("Graph Database Updates");
-    }
-    
-     /**
-      * ButtonAddProperty1ActionPerformed: add new property to list of new node properties
-      * @param evt 
-      */
-    
-    private void ButtonAddProperty1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddProperty1ActionPerformed
-     
-        //add new property to list    
-        String[] s = {ComboBoxProperty1.getSelectedItem().toString(),TextField1.getText()};
-        createNodePropertyList.add(s);
-        jTextPane1.setText(jTextPane1.getText()+"\n Added node property: "+ComboBoxProperty1.getSelectedItem().toString()+": "+TextField1.getText());
-
-        //add possible new property type to hashmap of node property types
-        List<String> props = new ArrayList(Arrays.asList(nodeProperties.get(ComboBoxType1.getSelectedItem().toString())));//get properties for this node type and turn into list to be searched
-        if (!props.contains(ComboBoxProperty1.getSelectedItem().toString()))//if current property is not already in the list   
-        {
-           props.add(ComboBoxProperty1.getSelectedItem().toString());
-           nodeProperties.replace(ComboBoxType1.getSelectedItem().toString(), props.toArray(new String[props.size()]));
-        }
-    }//GEN-LAST:event_ButtonAddProperty1ActionPerformed
-
-    /**
-     * ComboBoxType1ActionPerformed: 
+     * ButtonAddAllProperties1ActionPerformed:
      * @param evt 
      */
-    private void ComboBoxType1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxType1ActionPerformed
-       //reset node properties    
-       ComboBoxProperty1.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypes(ComboBoxType1.getSelectedItem().toString())));
-    }//GEN-LAST:event_ComboBoxType1ActionPerformed
+    private void ButtonAddAllProperties1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddAllProperties1ActionPerformed
+        String nodeType =  ComboBoxType1.getSelectedItem().toString();
+        String[] props = nodeProperties.get(nodeType);
+        String[] currentVals = new String[props.length];
+        PropertyDialog p = new PropertyDialog(this, true, "Node",nodeType, props, currentVals);
+        String[] vals = p.showDialog();
+
+        createNodePropertyList.clear();
+
+        for (int i = 0; i<props.length; i++)
+        {
+            String[] s = {props[i],vals[i]};
+            createNodePropertyList.add(s);
+        }
+        jTextPane1.setText(jTextPane1.getText()+"\n Added "+props.length+" new node properties.");
+    }//GEN-LAST:event_ButtonAddAllProperties1ActionPerformed
+
+    /**
+     * ButtonClearProperties1ActionPerformed:
+     * @param evt 
+     */
+    private void ButtonClearProperties1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonClearProperties1ActionPerformed
+
+        createNodePropertyList.clear();
+        jTextPane1.setText(jTextPane1.getText()+"\n Cleared current list of properties for new node.");
+    }//GEN-LAST:event_ButtonClearProperties1ActionPerformed
 
     /**
      * ButtonCreateNodeActionPerformed:
@@ -2146,272 +2070,52 @@ public class GraphDatabaseForm extends javax.swing.JFrame
 
         propertyList = propertyList.substring(0,propertyList.length()-1);//remove last comma
         session.run( "create (newNode:"+ ComboBoxType1.getSelectedItem().toString()+"{"+propertyList+"})") ;
-        
+
         jTextPane1.setText(jTextPane1.getText()+"\n Created new node: "+ComboBoxType1.getSelectedItem().toString()+" "+propertyList);
         createNodePropertyList.clear();
-         
+
         refreshNode1Panel();
         refreshPanels();
     }//GEN-LAST:event_ButtonCreateNodeActionPerformed
 
-    /**
-     * ButtonClearProperties1ActionPerformed:
-     * @param evt 
-     */
-    private void ButtonClearProperties1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonClearProperties1ActionPerformed
-      
-        createNodePropertyList.clear();
-        jTextPane1.setText(jTextPane1.getText()+"\n Cleared current list of properties for new node.");
-    }//GEN-LAST:event_ButtonClearProperties1ActionPerformed
-
-    /**
-     * ComboBoxType2ActionPerformed:
-     * @param evt 
-     */
-    private void ComboBoxType2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxType2ActionPerformed
-        
-        String [] names = getNodeNames((String) ComboBoxType2.getSelectedItem());
-        ComboBoxName1.setModel(new javax.swing.DefaultComboBoxModel(names));
-        ComboBoxID1.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType2.getSelectedItem().toString(), ComboBoxName1.getSelectedItem().toString())));
-        ComboBoxProperty2.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypesfromID(ComboBoxID1.getSelectedItem().toString())));
-        TextField2.setText(getNodePropertyValue(ComboBoxProperty2.getSelectedItem().toString(), ComboBoxID1.getSelectedItem().toString())[0]);
-
-        refreshPanels();
-    }//GEN-LAST:event_ComboBoxType2ActionPerformed
-
-    /**
-     * ComboBoxName1ActionPerformed:
-     * @param evt 
-     */
-    private void ComboBoxName1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxName1ActionPerformed
-        
-        ComboBoxID1.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType2.getSelectedItem().toString(), ComboBoxName1.getSelectedItem().toString())));
-        ComboBoxProperty2.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypesfromID(ComboBoxID1.getSelectedItem().toString())));
-        TextField2.setText(getNodePropertyValue(ComboBoxProperty2.getSelectedItem().toString(), ComboBoxID1.getSelectedItem().toString())[0]);
-
-        refreshPanels();
-    }//GEN-LAST:event_ComboBoxName1ActionPerformed
-
-    /**
-     * ComboBoxRelationship1ActionPerformed:
-     * @param evt 
-     */
-    private void ComboBoxRelationship1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxRelationship1ActionPerformed
-         
-        if(!ComboBoxRelationship1.getSelectedItem().equals(" ")) 
-        {
-            ComboBoxProperty3.setModel(new javax.swing.DefaultComboBoxModel(relationshipProperties.get(ComboBoxRelationship1.getSelectedItem())));
-
-            ComboBoxType3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Types(ComboBoxRelationship1.getSelectedItem().toString())));
-            ComboBoxName3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Names(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString())));
-            ComboBoxID2.setModel(new javax.swing.DefaultComboBoxModel(getNode2IDs(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxName3.getSelectedItem().toString())));
-
-            TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
-        }
-    }//GEN-LAST:event_ComboBoxRelationship1ActionPerformed
-
-    /**
-     * ComboBoxRelationship2ActionPerformed:
-     * @param evt 
-     */
-    private void ComboBoxRelationship2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxRelationship2ActionPerformed
-        
-        if(!ComboBoxRelationship2.getSelectedItem().equals(" "))
-        {
-            ComboBoxProperty4.setModel(new javax.swing.DefaultComboBoxModel(relationshipProperties.get(ComboBoxRelationship2.getSelectedItem())));
-            refreshNode2Panel2();
-        }    
-    }//GEN-LAST:event_ComboBoxRelationship2ActionPerformed
-
-    /**
-     * ComboBoxType4ActionPerformed:
-     * @param evt 
-     */
-    private void ComboBoxType4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxType4ActionPerformed
-       
-        ComboBoxName4.setModel(new javax.swing.DefaultComboBoxModel(getNodeNames(ComboBoxType4.getSelectedItem().toString()))); 
-        ComboBoxID3.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType4.getSelectedItem().toString(), ComboBoxName4.getSelectedItem().toString())));
-    }//GEN-LAST:event_ComboBoxType4ActionPerformed
-
-    /**
-     * ButtonAddProperty2ActionPerformed:
-     * @param evt 
-     */
-    private void ButtonAddProperty2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddProperty2ActionPerformed
-        
-        String[] s = {ComboBoxProperty4.getSelectedItem().toString(),TextField4.getText()};
-        createRelationshipPropertyList.add(s);
-        jTextPane1.setText(jTextPane1.getText()+"\n Added relationship property: "+ComboBoxProperty4.getSelectedItem().toString()+": "+TextField4.getText());
-
-        //add possible new property type to hashmap of relationship property types
-        List<String> props = new ArrayList(Arrays.asList(relationshipProperties.get(ComboBoxRelationship2.getSelectedItem().toString())));//get properties for this node type and turn into list to be searched
-        if (!props.contains(ComboBoxProperty4.getSelectedItem().toString()))//if current property is not already in the list   
-        {
-            props.add(ComboBoxProperty4.getSelectedItem().toString());
-            relationshipProperties.replace(ComboBoxRelationship2.getSelectedItem().toString(), props.toArray(new String[props.size()]));
-        }
-    }//GEN-LAST:event_ButtonAddProperty2ActionPerformed
-
-    /**
-     * ButtonCreateRelationshipActionPerformed:
-     * @param evt 
-     */
-    private void ButtonCreateRelationshipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCreateRelationshipActionPerformed
-        
-        String propertyList = "";
-
-        for (int i = 0; i<createRelationshipPropertyList.size(); i++)
-        {
-            propertyList = propertyList +createRelationshipPropertyList.get(i)[0]+": '"+createRelationshipPropertyList.get(i)[1]+"',";
-        }
-
-        if(propertyList.length()>0)
-        {
-            propertyList = propertyList.substring(0, propertyList.length()-1);
-        }
-        
-        String matchString = "match (node1), (node2) ";
-        String whereString = "where node1.ID = '"+ComboBoxID1.getSelectedItem().toString()+"' and node2.ID = '"+ComboBoxID3.getSelectedItem().toString()+"' ";
-        String createString = "create (node1) - [r:"+ComboBoxRelationship2.getSelectedItem().toString() + "{ "+propertyList+"}]->(node2)";
-        System.out.println(matchString+whereString+createString);
-            
-        session.run(matchString+whereString+createString);
-        
-        jTextPane1.setText(jTextPane1.getText()+"\n Created new relationship: "+ComboBoxName1.getSelectedItem().toString()+" - "+ComboBoxRelationship2.getSelectedItem().toString()+" "+propertyList+ " -> "+ComboBoxName4.getSelectedItem().toString());
-        createRelationshipPropertyList.clear();
-        
-        refreshCurrentRelationshipPanel();
-        refreshNode2Panel1();
-        TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
-    }//GEN-LAST:event_ButtonCreateRelationshipActionPerformed
-
-    /**
-     * ComboBoxType3ActionPerformed:
-     * @param evt 
-     */
-    private void ComboBoxType3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxType3ActionPerformed
-        ComboBoxName3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Names(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString())));
-        ComboBoxID2.setModel(new javax.swing.DefaultComboBoxModel(getNode2IDs(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxName3.getSelectedItem().toString())));
- 
-    }//GEN-LAST:event_ComboBoxType3ActionPerformed
-
-    /**
-     * ButtonAddAllProperties2ActionPerformed:
-     * @param evt 
-     */
-    private void ButtonAddAllProperties2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddAllProperties2ActionPerformed
-        String relType =  ComboBoxRelationship2.getSelectedItem().toString();       
-        String[] props = relationshipProperties.get(relType);
-        String[] currentVals = new String[props.length];
-        PropertyDialog p = new PropertyDialog(this, true, "Relationship",relType, props, currentVals); 
-        String[] vals = p.showDialog();
-                
-        createRelationshipPropertyList.clear();
-        
-        for (int i = 0; i<props.length; i++)
-        {
-            String[] s = {props[i],vals[i]};
-            createRelationshipPropertyList.add(s);
-        } 
-        
-        jTextPane1.setText(jTextPane1.getText()+"\n Added "+props.length+" new relationship properties.");
-    }//GEN-LAST:event_ButtonAddAllProperties2ActionPerformed
-
-
-    private void TextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TextField2ActionPerformed
-
-    /**
-     * ComboBoxProperty2ActionPerformed:
-     * @param evt 
-     */
-    private void ComboBoxProperty2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxProperty2ActionPerformed
-        TextField2.setText(getNodePropertyValue(ComboBoxProperty2.getSelectedItem().toString(), ComboBoxID1.getSelectedItem().toString())[0]);
-    }//GEN-LAST:event_ComboBoxProperty2ActionPerformed
-/**
- * ButtonBrowse1ActionPerformed:
- * @param evt 
- */
-    private void ButtonBrowse1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonBrowse1ActionPerformed
-        
-        int returnVal =FileChooser.showOpenDialog(this);
+     /**
+      * ButtonAddProperty1ActionPerformed: add new property to list of new node properties
+      * @param evt 
+      */
     
-        if (returnVal == JFileChooser.APPROVE_OPTION) 
-        {
-            File file = FileChooser.getSelectedFile();
-            TextFieldLoadNodes.setText(file.getAbsolutePath());
-        }
-        else
-        {
-            System.out.println("File access cancelled by user.");
-        }
-    }//GEN-LAST:event_ButtonBrowse1ActionPerformed
-/**
- * ButtonAddNodesActionPerformed:
- * @param evt 
- */
-    private void ButtonAddNodesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddNodesActionPerformed
-     
-        ArrayList<ArrayList<String>> nodes = getValuesFromCSV(TextFieldLoadNodes.getText());
-        
-        for(int i=0; i<nodes.size(); i++)//for each row of file
-        {
-            int rowLength = nodes.get(i).size();
-            if(rowLength>=4)
-            {
-                String nodeID = nodes.get(i).get(0);
-                String nodeType = nodes.get(i).get(1);
+    private void ButtonAddProperty1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddProperty1ActionPerformed
 
-                String propertyString = "ID: '"+nodeID+"',";
+        //add new property to list
+        String[] s = {ComboBoxProperty1.getSelectedItem().toString(),TextField1.getText()};
+        createNodePropertyList.add(s);
+        jTextPane1.setText(jTextPane1.getText()+"\n Added node property: "+ComboBoxProperty1.getSelectedItem().toString()+": "+TextField1.getText());
 
-                int k = 2;
-                
-                for(int j=0; j<(rowLength-2)/2; j++)
-                {
-                    propertyString = propertyString+nodes.get(i).get(k)+": '"+nodes.get(i).get(k+1)+"',";
-                    k+=2;
-                }
-                     
-                propertyString = propertyString.substring(0,propertyString.length()-1);//remove last comma
-                      
-                session.run( "create (newNode:"+ nodeType+"{"+propertyString+"})") ;
-                jTextPane1.setText(jTextPane1.getText()+"\n Created new node: "+nodeType+" "+propertyString);
-                    
-            }
-            else
-            {
-                System.out.println("Invalid row in file. Each row needs at least 4 values: ID, node type, name, node name.");
-            }      
+        //add possible new property type to hashmap of node property types
+        List<String> props = new ArrayList(Arrays.asList(nodeProperties.get(ComboBoxType1.getSelectedItem().toString())));//get properties for this node type and turn into list to be searched
+        if (!props.contains(ComboBoxProperty1.getSelectedItem().toString()))//if current property is not already in the list
+        {
+            props.add(ComboBoxProperty1.getSelectedItem().toString());
+            nodeProperties.replace(ComboBoxType1.getSelectedItem().toString(), props.toArray(new String[props.size()]));
         }
-    }//GEN-LAST:event_ButtonAddNodesActionPerformed
+    }//GEN-LAST:event_ButtonAddProperty1ActionPerformed
 
     /**
-     * ButtonBrowse2ActionPerformed:
+     * ComboBoxType1ActionPerformed: 
      * @param evt 
      */
-    private void ButtonBrowse2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonBrowse2ActionPerformed
-        int returnVal =FileChooser.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION)
-        {
-            File file = FileChooser.getSelectedFile();
-     
-            TextFieldLoadRelationships.setText(file.getAbsolutePath());
-        }
-        else
-        {
-            System.out.println("File access cancelled by user.");
-        }
-    }//GEN-LAST:event_ButtonBrowse2ActionPerformed
+    private void ComboBoxType1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxType1ActionPerformed
+        //reset node properties
+        ComboBoxProperty1.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypes(ComboBoxType1.getSelectedItem().toString())));
+    }//GEN-LAST:event_ComboBoxType1ActionPerformed
 
     /**
      * ButtonAddRelationshipsActionPerformed:
      * @param evt 
      */
     private void ButtonAddRelationshipsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddRelationshipsActionPerformed
-        
+
         ArrayList<ArrayList<String>> relationships = getValuesFromCSV(TextFieldLoadRelationships.getText());
-        
+
         for(int i=0; i<relationships.size(); i++)//for each row of file
         {
             int rowLength = relationships.get(i).size();
@@ -2433,7 +2137,7 @@ public class GraphDatabaseForm extends javax.swing.JFrame
                 {
                     propertyString = propertyString.substring(0,propertyString.length()-1);//remove last comma
                 }
-                      
+
                 //make new relationship
                 String matchString = "match (node1), (node2) ";
                 String whereString = "where node1.ID = '"+ID1+"' and node2.ID = '"+ID2+"' ";
@@ -2448,98 +2152,454 @@ public class GraphDatabaseForm extends javax.swing.JFrame
             {
                 System.out.println("Invalid row in file. Each row needs at least 3 values: ID1, ID2, relationship type.");
             }
-       }
+        }
     }//GEN-LAST:event_ButtonAddRelationshipsActionPerformed
 
     /**
-     * ButtonAddAllProperties1ActionPerformed:
+     * ButtonBrowse2ActionPerformed:
      * @param evt 
      */
-    private void ButtonAddAllProperties1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddAllProperties1ActionPerformed
-        String nodeType =  ComboBoxType1.getSelectedItem().toString();       
-        String[] props = nodeProperties.get(nodeType);
+    private void ButtonBrowse2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonBrowse2ActionPerformed
+        int returnVal =FileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            File file = FileChooser.getSelectedFile();
+
+            TextFieldLoadRelationships.setText(file.getAbsolutePath());
+        }
+        else
+        {
+            System.out.println("File access cancelled by user.");
+        }
+    }//GEN-LAST:event_ButtonBrowse2ActionPerformed
+
+/**
+ * ButtonBrowse1ActionPerformed:
+ * @param evt 
+ */
+    private void ButtonBrowse1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonBrowse1ActionPerformed
+
+        int returnVal =FileChooser.showOpenDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            File file = FileChooser.getSelectedFile();
+            TextFieldLoadNodes.setText(file.getAbsolutePath());
+        }
+        else
+        {
+            System.out.println("File access cancelled by user.");
+        }
+    }//GEN-LAST:event_ButtonBrowse1ActionPerformed
+
+/**
+ * ButtonAddNodesActionPerformed:
+ * @param evt 
+ */
+    private void ButtonAddNodesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddNodesActionPerformed
+
+        ArrayList<ArrayList<String>> nodes = getValuesFromCSV(TextFieldLoadNodes.getText());
+
+        for(int i=0; i<nodes.size(); i++)//for each row of file
+        {
+            int rowLength = nodes.get(i).size();
+            if(rowLength>=4)
+            {
+                String nodeID = nodes.get(i).get(0);
+                String nodeType = nodes.get(i).get(1);
+
+                String propertyString = "ID: '"+nodeID+"',";
+
+                int k = 2;
+
+                for(int j=0; j<(rowLength-2)/2; j++)
+                {
+                    propertyString = propertyString+nodes.get(i).get(k)+": '"+nodes.get(i).get(k+1)+"',";
+                    k+=2;
+                }
+
+                propertyString = propertyString.substring(0,propertyString.length()-1);//remove last comma
+
+                session.run( "create (newNode:"+ nodeType+"{"+propertyString+"})") ;
+                jTextPane1.setText(jTextPane1.getText()+"\n Created new node: "+nodeType+" "+propertyString);
+
+            }
+            else
+            {
+                System.out.println("Invalid row in file. Each row needs at least 4 values: ID, node type, name, node name.");
+            }
+        }
+    }//GEN-LAST:event_ButtonAddNodesActionPerformed
+
+    private void ButtonViewGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonViewGraphActionPerformed
+        // TODO add your handling code here:
+        String[][] graphNodes = getAllNodes();
+
+        for (String[] graphNode : graphNodes)
+        {
+            System.out.println(":" + graphNode[0] + ":" + graphNode[1] + ":" + graphNode[2]);
+        }
+        String[][] graphRelationships = getAllRelationships();
+
+        for (String[] graphRelationship : graphRelationships)
+        {
+            System.out.println(":" + graphRelationship[0] + ":" + graphRelationship[1] + ":" + graphRelationship[2]);
+        }
+        //write javascript to make mini graph...
+        try
+        {
+            writeHTMLFileForGraphDisplay(graphNodes,graphRelationships);
+        }
+        catch (FileNotFoundException ex)
+        {
+            Logger.getLogger(GraphDatabaseForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        String htmlFilePath = "\\graphdisplay.html";
+        File htmlFile = new File(htmlFilePath);
+        try
+        {
+            Desktop.getDesktop().browse(htmlFile.toURI());
+        }
+        catch (IOException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+    }//GEN-LAST:event_ButtonViewGraphActionPerformed
+
+    /**
+     * ButtonEditProperties4ActionPerformed:
+     * @param evt 
+     */
+    private void ButtonEditProperties4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditProperties4ActionPerformed
+
+        String nodeType =  ComboBoxType4.getSelectedItem().toString();
+        String nodeID = ComboBoxID3.getSelectedItem().toString();
+        updateNodePropertyValues(nodeType, nodeID);
+
+    }//GEN-LAST:event_ButtonEditProperties4ActionPerformed
+
+    private void ComboBoxID3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxID3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ComboBoxID3ActionPerformed
+
+    private void ComboBoxName4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxName4ActionPerformed
+
+        ComboBoxID3.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType4.getSelectedItem().toString(), ComboBoxName4.getSelectedItem().toString())));
+    }//GEN-LAST:event_ComboBoxName4ActionPerformed
+
+    /**
+     * ComboBoxType4ActionPerformed:
+     * @param evt 
+     */
+    private void ComboBoxType4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxType4ActionPerformed
+
+        ComboBoxName4.setModel(new javax.swing.DefaultComboBoxModel(getNodeNames(ComboBoxType4.getSelectedItem().toString())));
+        ComboBoxID3.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType4.getSelectedItem().toString(), ComboBoxName4.getSelectedItem().toString())));
+    }//GEN-LAST:event_ComboBoxType4ActionPerformed
+
+    /**
+     * ButtonAddAllProperties2ActionPerformed:
+     * @param evt 
+     */
+    private void ButtonAddAllProperties2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddAllProperties2ActionPerformed
+        String relType =  ComboBoxRelationship2.getSelectedItem().toString();
+        String[] props = relationshipProperties.get(relType);
         String[] currentVals = new String[props.length];
-        PropertyDialog p = new PropertyDialog(this, true, "Node",nodeType, props, currentVals); 
+        PropertyDialog p = new PropertyDialog(this, true, "Relationship",relType, props, currentVals);
         String[] vals = p.showDialog();
-                
-        createNodePropertyList.clear();
-        
+
+        createRelationshipPropertyList.clear();
+
         for (int i = 0; i<props.length; i++)
         {
             String[] s = {props[i],vals[i]};
-            createNodePropertyList.add(s);
-        }   
-        jTextPane1.setText(jTextPane1.getText()+"\n Added "+props.length+" new node properties.");
-    }//GEN-LAST:event_ButtonAddAllProperties1ActionPerformed
+            createRelationshipPropertyList.add(s);
+        }
+
+        jTextPane1.setText(jTextPane1.getText()+"\n Added "+props.length+" new relationship properties.");
+    }//GEN-LAST:event_ButtonAddAllProperties2ActionPerformed
 
     /**
-     * ComboBoxID1ActionPerformed:
+     * ButtonAddProperty2ActionPerformed:
      * @param evt 
      */
-    private void ComboBoxID1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxID1ActionPerformed
-        
-        ComboBoxProperty2.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypesfromID(ComboBoxID1.getSelectedItem().toString())));
-        TextField2.setText(getNodePropertyValue(ComboBoxProperty2.getSelectedItem().toString(), ComboBoxID1.getSelectedItem().toString())[0]);
-       
-        refreshPanels();
-    }//GEN-LAST:event_ComboBoxID1ActionPerformed
+    private void ButtonAddProperty2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddProperty2ActionPerformed
+
+        String[] s = {ComboBoxProperty4.getSelectedItem().toString(),TextField4.getText()};
+        createRelationshipPropertyList.add(s);
+        jTextPane1.setText(jTextPane1.getText()+"\n Added relationship property: "+ComboBoxProperty4.getSelectedItem().toString()+": "+TextField4.getText());
+
+        //add possible new property type to hashmap of relationship property types
+        List<String> props = new ArrayList(Arrays.asList(relationshipProperties.get(ComboBoxRelationship2.getSelectedItem().toString())));//get properties for this node type and turn into list to be searched
+        if (!props.contains(ComboBoxProperty4.getSelectedItem().toString()))//if current property is not already in the list
+        {
+            props.add(ComboBoxProperty4.getSelectedItem().toString());
+            relationshipProperties.replace(ComboBoxRelationship2.getSelectedItem().toString(), props.toArray(new String[props.size()]));
+        }
+    }//GEN-LAST:event_ButtonAddProperty2ActionPerformed
+
+    /**
+     * ButtonCreateRelationshipActionPerformed:
+     * @param evt 
+     */
+    private void ButtonCreateRelationshipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonCreateRelationshipActionPerformed
+
+        String propertyList = "";
+
+        for (int i = 0; i<createRelationshipPropertyList.size(); i++)
+        {
+            propertyList = propertyList +createRelationshipPropertyList.get(i)[0]+": '"+createRelationshipPropertyList.get(i)[1]+"',";
+        }
+
+        if(propertyList.length()>0)
+        {
+            propertyList = propertyList.substring(0, propertyList.length()-1);
+        }
+
+        String matchString = "match (node1), (node2) ";
+        String whereString = "where node1.ID = '"+ComboBoxID1.getSelectedItem().toString()+"' and node2.ID = '"+ComboBoxID3.getSelectedItem().toString()+"' ";
+        String createString = "create (node1) - [r:"+ComboBoxRelationship2.getSelectedItem().toString() + "{ "+propertyList+"}]->(node2)";
+        System.out.println(matchString+whereString+createString);
+
+        session.run(matchString+whereString+createString);
+
+        jTextPane1.setText(jTextPane1.getText()+"\n Created new relationship: "+ComboBoxName1.getSelectedItem().toString()+" - "+ComboBoxRelationship2.getSelectedItem().toString()+" "+propertyList+ " -> "+ComboBoxName4.getSelectedItem().toString());
+        createRelationshipPropertyList.clear();
+
+        refreshCurrentRelationshipPanel();
+        refreshNode2Panel1();
+        TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
+    }//GEN-LAST:event_ButtonCreateRelationshipActionPerformed
+
+    /**
+     * ComboBoxRelationship2ActionPerformed:
+     * @param evt 
+     */
+    private void ComboBoxRelationship2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxRelationship2ActionPerformed
+
+        if(!ComboBoxRelationship2.getSelectedItem().equals(" "))
+        {
+            ComboBoxProperty4.setModel(new javax.swing.DefaultComboBoxModel(relationshipProperties.get(ComboBoxRelationship2.getSelectedItem())));
+            refreshNode2Panel2();
+        }
+    }//GEN-LAST:event_ComboBoxRelationship2ActionPerformed
+
+    private void TextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextField3ActionPerformed
+
+    /**
+     * ButtonEditProperties2ActionPerformed:
+     * @param evt 
+     */
+    private void ButtonEditProperties2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditProperties2ActionPerformed
+
+        String node1ID =  ComboBoxID1.getSelectedItem().toString();
+        String node2ID = ComboBoxID2.getSelectedItem().toString();
+        String relType = ComboBoxRelationship1.getSelectedItem().toString();
+        String[] props = getRelationshipProperties(relType);
+        String[] currentVals = new String[props.length];
+
+        for(int j = 0; j<props.length; j++)
+        {
+            currentVals[j] = getRelationshipPropertyValue(node1ID, node2ID, relType, props[j])[0];
+        }
+
+        PropertyDialog p = new PropertyDialog(this, true, "Relationship",relType, props, currentVals);
+        String[] newVals = p.showDialog();
+
+        for (int i = 0; i<props.length; i++)
+        {
+            updateRelationshipPropertyValue(node1ID,node2ID,relType, props[i], newVals[i]);
+        }
+
+        jTextPane1.setText(jTextPane1.getText()+"\n Updated "+props.length+" relationship properties.");
+    }//GEN-LAST:event_ButtonEditProperties2ActionPerformed
 
     /**
      * ComboBoxProperty3ActionPerformed:
      * @param evt 
      */
     private void ComboBoxProperty3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxProperty3ActionPerformed
-        
+
         TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
     }//GEN-LAST:event_ComboBoxProperty3ActionPerformed
+
+    /**
+     * ButtonDeleteRelationshipActionPerformed:
+     * @param evt 
+     */
+    private void ButtonDeleteRelationshipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDeleteRelationshipActionPerformed
+
+        String ID1 = ComboBoxID1.getSelectedItem().toString();
+        String ID2 = ComboBoxID2.getSelectedItem().toString();
+        String relType = ComboBoxRelationship1.getSelectedItem().toString();
+
+        if(!ID1.equals(" ") && !ID2.equals(" ") && !relType.equals(" "))
+        {
+            String queryString = "match (n1)-[r:"+relType+"]->(n2) where n1.ID = '"+ID1+"'and n2.ID = '"+ID2+"' delete r";
+            System.out.println("delete query: "+queryString);
+
+            session.run(queryString);
+
+            jTextPane1.setText(jTextPane1.getText()+"\n Deleted relationship: "+ID1+" - "+relType+" -> "+ID2);
+            refreshNode1Panel();
+            refreshPanels();
+        }
+        else
+        {
+            jTextPane1.setText(jTextPane1.getText()+"\n No relationship to delete. ");
+        }
+    }//GEN-LAST:event_ButtonDeleteRelationshipActionPerformed
+
+    /**
+     * ComboBoxRelationship1ActionPerformed:
+     * @param evt 
+     */
+    private void ComboBoxRelationship1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxRelationship1ActionPerformed
+
+        if(!ComboBoxRelationship1.getSelectedItem().equals(" "))
+        {
+            ComboBoxProperty3.setModel(new javax.swing.DefaultComboBoxModel(relationshipProperties.get(ComboBoxRelationship1.getSelectedItem())));
+
+            ComboBoxType3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Types(ComboBoxRelationship1.getSelectedItem().toString())));
+            ComboBoxName3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Names(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString())));
+            ComboBoxID2.setModel(new javax.swing.DefaultComboBoxModel(getNode2IDs(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxName3.getSelectedItem().toString())));
+
+            TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
+        }
+    }//GEN-LAST:event_ComboBoxRelationship1ActionPerformed
+
+    /**
+     *ButtonEditProperties3ActionPerformed: 
+     * @param evt 
+     */
+    private void ButtonEditProperties3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditProperties3ActionPerformed
+
+        String nodeType =  ComboBoxType3.getSelectedItem().toString();
+        String nodeID = ComboBoxID2.getSelectedItem().toString();
+        updateNodePropertyValues(nodeType, nodeID);
+
+    }//GEN-LAST:event_ButtonEditProperties3ActionPerformed
+
+    private void ComboBoxID2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxID2ActionPerformed
+
+        TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
+    }//GEN-LAST:event_ComboBoxID2ActionPerformed
 
     /**
      * ComboBoxName3ActionPerformed:
      * @param evt 
      */
     private void ComboBoxName3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxName3ActionPerformed
-        
+
         ComboBoxID2.setModel(new javax.swing.DefaultComboBoxModel(getNode2IDs(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxName3.getSelectedItem().toString())));
-         //ComboBoxProperty3.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipProperties()));
+        //ComboBoxProperty3.setModel(new javax.swing.DefaultComboBoxModel(getRelationshipProperties()));
         TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
     }//GEN-LAST:event_ComboBoxName3ActionPerformed
 
-  
-    private void ComboBoxID3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxID3ActionPerformed
+    /**
+     * ComboBoxType3ActionPerformed:
+     * @param evt 
+     */
+    private void ComboBoxType3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxType3ActionPerformed
+        ComboBoxName3.setModel(new javax.swing.DefaultComboBoxModel(getNode2Names(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString())));
+        ComboBoxID2.setModel(new javax.swing.DefaultComboBoxModel(getNode2IDs(ComboBoxID1.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxName3.getSelectedItem().toString())));
+
+    }//GEN-LAST:event_ComboBoxType3ActionPerformed
+
+    private void ButtonViewNodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonViewNodeActionPerformed
+        //get the current node
+
+        String currentNodeID = ComboBoxID1.getSelectedItem().toString();
+        //query to get its relationships
+
+        String[][] result = getNodeSurroundings(currentNodeID);
+
+        //write javascript to make mini graph...
+        try
+        {
+            writeHTMLFile(result);
+        }
+        catch (FileNotFoundException ex)
+        {
+            Logger.getLogger(GraphDatabaseForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        String htmlFilePath = "\\graphdisplay.html";
+        File htmlFile = new File(htmlFilePath);
+        try
+        {
+            Desktop.getDesktop().browse(htmlFile.toURI());
+        }
+        catch (IOException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+    }//GEN-LAST:event_ButtonViewNodeActionPerformed
+
+    /**
+     * ButtonEditProperties1ActionPerformed:
+     * @param evt 
+     */
+    private void ButtonEditProperties1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditProperties1ActionPerformed
+
+        String nodeType =  ComboBoxType2.getSelectedItem().toString();
+        String nodeID = ComboBoxID1.getSelectedItem().toString();
+        updateNodePropertyValues(nodeType, nodeID);
+    }//GEN-LAST:event_ButtonEditProperties1ActionPerformed
+
+    /**
+     * ComboBoxID1ActionPerformed:
+     * @param evt 
+     */
+    private void ComboBoxID1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxID1ActionPerformed
+
+        ComboBoxProperty2.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypesfromID(ComboBoxID1.getSelectedItem().toString())));
+        TextField2.setText(getNodePropertyValue(ComboBoxProperty2.getSelectedItem().toString(), ComboBoxID1.getSelectedItem().toString())[0]);
+
+        refreshPanels();
+    }//GEN-LAST:event_ComboBoxID1ActionPerformed
+
+    /**
+     * ComboBoxName1ActionPerformed:
+     * @param evt 
+     */
+    private void ComboBoxName1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxName1ActionPerformed
+
+        ComboBoxID1.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType2.getSelectedItem().toString(), ComboBoxName1.getSelectedItem().toString())));
+        ComboBoxProperty2.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypesfromID(ComboBoxID1.getSelectedItem().toString())));
+        TextField2.setText(getNodePropertyValue(ComboBoxProperty2.getSelectedItem().toString(), ComboBoxID1.getSelectedItem().toString())[0]);
+
+        refreshPanels();
+    }//GEN-LAST:event_ComboBoxName1ActionPerformed
+
+    private void TextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextField2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ComboBoxID3ActionPerformed
+    }//GEN-LAST:event_TextField2ActionPerformed
 
-    private void ComboBoxName4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxName4ActionPerformed
-        
-        ComboBoxID3.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType4.getSelectedItem().toString(), ComboBoxName4.getSelectedItem().toString())));
-    }//GEN-LAST:event_ComboBoxName4ActionPerformed
+    private void ComboBoxProperty2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxProperty2ActionPerformed
 
-    private void TextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TextField3ActionPerformed
-
-    private void ComboBoxID2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxID2ActionPerformed
-        
-        TextField3.setText(getRelationshipPropertyValue(ComboBoxID1.getSelectedItem().toString(), ComboBoxID2.getSelectedItem().toString(), ComboBoxRelationship1.getSelectedItem().toString(), ComboBoxProperty3.getSelectedItem().toString())[0]);
-    }//GEN-LAST:event_ComboBoxID2ActionPerformed
+    }//GEN-LAST:event_ComboBoxProperty2ActionPerformed
 
     /**
      * ButtonDeleteNodeActionPerformed:
      * @param evt 
      */
     private void ButtonDeleteNodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDeleteNodeActionPerformed
-        
+
         String ID1 = ComboBoxID1.getSelectedItem().toString();
         if(!ID1.equals(" "))
         {
             String queryString = "match (n)-[r]->() where n.ID = '"+ID1+"' return r";
             String[] res = getQueryResults(queryString);//check for current relationships
-            queryString = "match ()-[r]->(n) where n.ID = '"+ID1+"' return r";   
+            queryString = "match ()-[r]->(n) where n.ID = '"+ID1+"' return r";
             String[] res2 = getQueryResults(queryString);//check for current relationships
-            
+
             if(res[0].equals(" ")&&res2[0].equals(" "))
             {
-                queryString = "match (n) where n.ID = '"+ID1+"' delete n";   
+                queryString = "match (n) where n.ID = '"+ID1+"' delete n";
 
                 session.run(queryString);
 
@@ -2555,192 +2615,34 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     }//GEN-LAST:event_ButtonDeleteNodeActionPerformed
 
     /**
-     * ButtonDeleteRelationshipActionPerformed:
+     * ComboBoxType2ActionPerformed:
      * @param evt 
      */
-    private void ButtonDeleteRelationshipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDeleteRelationshipActionPerformed
-        
-        String ID1 = ComboBoxID1.getSelectedItem().toString();
-        String ID2 = ComboBoxID2.getSelectedItem().toString();
-        String relType = ComboBoxRelationship1.getSelectedItem().toString();
-        
-        if(!ID1.equals(" ") && !ID2.equals(" ") && !relType.equals(" "))
-        {
-            String queryString = "match (n1)-[r:"+relType+"]->(n2) where n1.ID = '"+ID1+"'and n2.ID = '"+ID2+"' delete r";   
-            System.out.println("delete query: "+queryString);
+    private void ComboBoxType2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxType2ActionPerformed
 
-            session.run(queryString);
+        String [] names = getNodeNames((String) ComboBoxType2.getSelectedItem());
+        ComboBoxName1.setModel(new javax.swing.DefaultComboBoxModel(names));
+        ComboBoxID1.setModel(new javax.swing.DefaultComboBoxModel(getNodeIDs(ComboBoxType2.getSelectedItem().toString(), ComboBoxName1.getSelectedItem().toString())));
+        ComboBoxProperty2.setModel(new javax.swing.DefaultComboBoxModel(getPropertyTypesfromID(ComboBoxID1.getSelectedItem().toString())));
+        TextField2.setText(getNodePropertyValue(ComboBoxProperty2.getSelectedItem().toString(), ComboBoxID1.getSelectedItem().toString())[0]);
 
-            jTextPane1.setText(jTextPane1.getText()+"\n Deleted relationship: "+ID1+" - "+relType+" -> "+ID2);
-            refreshNode1Panel();
-            refreshPanels();
-        }
-        else
-        {
-            jTextPane1.setText(jTextPane1.getText()+"\n No relationship to delete. ");  
-        }
-    }//GEN-LAST:event_ButtonDeleteRelationshipActionPerformed
+        refreshPanels();
+    }//GEN-LAST:event_ComboBoxType2ActionPerformed
 
     /**
-     * ButtonEditProperties1ActionPerformed:
-     * @param evt 
-     */
-    private void ButtonEditProperties1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditProperties1ActionPerformed
-        
-        String nodeType =  ComboBoxType2.getSelectedItem().toString(); 
-        String nodeID = ComboBoxID1.getSelectedItem().toString();
-        updateNodePropertyValues(nodeType, nodeID);
-    }//GEN-LAST:event_ButtonEditProperties1ActionPerformed
+     * customInitComponents
+    */
+    private void customInitComponents()
+    {
+        createNodePropertyList = new ArrayList<>();
+        createRelationshipPropertyList = new ArrayList<>();
+        FileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        this.setTitle("Graph Notes Database");
+//        this.add(jScrollPane2);[1319, 779]
+    }
+    
 
-    /**
-     * ButtonEditProperties2ActionPerformed:
-     * @param evt 
-     */
-    private void ButtonEditProperties2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditProperties2ActionPerformed
-        
-        String node1ID =  ComboBoxID1.getSelectedItem().toString(); 
-        String node2ID = ComboBoxID2.getSelectedItem().toString();
-        String relType = ComboBoxRelationship1.getSelectedItem().toString();
-        String[] props = getRelationshipProperties(relType);
-        String[] currentVals = new String[props.length];
-        
-        for(int j = 0; j<props.length; j++)
-        {
-            currentVals[j] = getRelationshipPropertyValue(node1ID, node2ID, relType, props[j])[0];
-        }
-        
-        PropertyDialog p = new PropertyDialog(this, true, "Relationship",relType, props, currentVals); 
-        String[] newVals = p.showDialog();
-       
-        for (int i = 0; i<props.length; i++)
-        {
-            updateRelationshipPropertyValue(node1ID,node2ID,relType, props[i], newVals[i]);
-        }   
-        
-        jTextPane1.setText(jTextPane1.getText()+"\n Updated "+props.length+" relationship properties.");
-    }//GEN-LAST:event_ButtonEditProperties2ActionPerformed
-
-    /**
-     *ButtonEditProperties3ActionPerformed: 
-     * @param evt 
-     */
-    private void ButtonEditProperties3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditProperties3ActionPerformed
-        
-        String nodeType =  ComboBoxType3.getSelectedItem().toString(); 
-        String nodeID = ComboBoxID2.getSelectedItem().toString();
-        updateNodePropertyValues(nodeType, nodeID);
-        
-    }//GEN-LAST:event_ButtonEditProperties3ActionPerformed
-
-    /**
-     * ButtonEditProperties4ActionPerformed:
-     * @param evt 
-     */
-    private void ButtonEditProperties4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditProperties4ActionPerformed
-        
-        String nodeType =  ComboBoxType4.getSelectedItem().toString(); 
-        String nodeID = ComboBoxID3.getSelectedItem().toString();
-        updateNodePropertyValues(nodeType, nodeID);
-        
-    }//GEN-LAST:event_ButtonEditProperties4ActionPerformed
-
-    /**
-     * ButtonBrowseDBActionPerformed:
-     * @param evt 
-     */
-    private void ButtonBrowseDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonBrowseDBActionPerformed
-     
-        int returnVal =FileChooser.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION)
-        {
-            File file = FileChooser.getSelectedFile();
-            TextFieldLoadDB.setText(file.getAbsolutePath());    
-        }
-        else
-        {
-            System.out.println("File access cancelled by user.");
-        }
-    }//GEN-LAST:event_ButtonBrowseDBActionPerformed
-
-    /**
-     * ButtonLoadDBActionPerformed:
-     * @param evt 
-     */
-    private void ButtonLoadDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonLoadDBActionPerformed
-        setNewDatabaseFields(TextFieldLoadDB.getText());
-    }//GEN-LAST:event_ButtonLoadDBActionPerformed
-
-    private void ButtonViewNodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonViewNodeActionPerformed
-        //get the current node
-
-        String currentNodeID = ComboBoxID1.getSelectedItem().toString();
-        //query to get its relationships
-        
-        String[][] result = getNodeSurroundings(currentNodeID);
-        
-        //write javascript to make mini graph...
-        try
-        {
-            writeHTMLFile(result);
-        }
-        catch (FileNotFoundException ex)
-        {
-            Logger.getLogger(GraphDatabaseForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        String htmlFilePath = "\\graphdisplay.html"; 
-        File htmlFile = new File(htmlFilePath);
-        try
-        {
-            Desktop.getDesktop().browse(htmlFile.toURI());
-        }
-        catch (IOException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-    }//GEN-LAST:event_ButtonViewNodeActionPerformed
-
-    private void ButtonViewGraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonViewGraphActionPerformed
-        // TODO add your handling code here:
-        String[][] graphNodes = getAllNodes();
-        
-        for (String[] graphNode : graphNodes)
-        {
-            System.out.println(":" + graphNode[0] + ":" + graphNode[1] + ":" + graphNode[2]);
-        }
-        String[][] graphRelationships = getAllRelationships();
-        
-        for (String[] graphRelationship : graphRelationships)
-        {
-            System.out.println(":" + graphRelationship[0] + ":" + graphRelationship[1] + ":" + graphRelationship[2]);
-        }
-        //write javascript to make mini graph...
-        try
-        {
-            writeHTMLFileForGraphDisplay(graphNodes,graphRelationships);
-        }
-        catch (FileNotFoundException ex)
-        {
-            Logger.getLogger(GraphDatabaseForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        String htmlFilePath = "\\graphdisplay.html"; 
-        File htmlFile = new File(htmlFilePath);
-        try
-        {
-            Desktop.getDesktop().browse(htmlFile.toURI());
-        }
-        catch (IOException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-    }//GEN-LAST:event_ButtonViewGraphActionPerformed
-
-    private void TextFieldLoadDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextFieldLoadDBActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TextFieldLoadDBActionPerformed
-
+  
     
     
     /**
@@ -2762,7 +2664,6 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     private javax.swing.JButton ButtonAddRelationships;
     private javax.swing.JButton ButtonBrowse1;
     private javax.swing.JButton ButtonBrowse2;
-    private javax.swing.JButton ButtonBrowseDB;
     private javax.swing.JButton ButtonClearProperties1;
     private javax.swing.JButton ButtonClearProperties2;
     private javax.swing.JButton ButtonCreateNode;
@@ -2773,7 +2674,6 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     private javax.swing.JButton ButtonEditProperties2;
     private javax.swing.JButton ButtonEditProperties3;
     private javax.swing.JButton ButtonEditProperties4;
-    private javax.swing.JButton ButtonLoadDB;
     private javax.swing.JButton ButtonViewGraph;
     private javax.swing.JButton ButtonViewNode;
     private javax.swing.JComboBox ComboBoxID1;
@@ -2797,7 +2697,6 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     private javax.swing.JTextField TextField2;
     private javax.swing.JTextField TextField3;
     private javax.swing.JTextField TextField4;
-    private javax.swing.JTextField TextFieldLoadDB;
     private javax.swing.JTextField TextFieldLoadNodes;
     private javax.swing.JTextField TextFieldLoadRelationships;
     private javax.swing.JLabel jLabel10;
@@ -2809,7 +2708,6 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
@@ -2828,8 +2726,9 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextPane jTextPane1;
     // End of variables declaration//GEN-END:variables
 }
