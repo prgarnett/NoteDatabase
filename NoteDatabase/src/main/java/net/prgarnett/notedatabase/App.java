@@ -54,8 +54,8 @@ public class App
     public static void main(String args[])
     {
         App noteDatabase = new App(args[0]);
-        
-        GraphDatabaseForm graphForm = new GraphDatabaseForm(noteDatabase.getDriver(), noteDatabase.getSession());
+//        
+//        GraphDatabaseForm graphForm = new GraphDatabaseForm(noteDatabase.getDriver(), noteDatabase.getSession());
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -67,20 +67,20 @@ public class App
             java.util.logging.Logger.getLogger(GraphDatabaseForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         
-        JFrame frame = new JFrame("ScrollDemo2");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFrame controlframe = new JFrame("Control Panel");
+        controlframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        JComponent newContentPane = new NewNotePanel();
-        newContentPane.setOpaque(true); //content panes must be opaque
+        JComponent controlContentPane = new ControlPanel(noteDatabase.getDriver());
+        controlContentPane.setOpaque(true); //content panes must be opaque
         
-        JScrollPane scroller = new JScrollPane(newContentPane);
-        scroller.setPreferredSize(new Dimension(200,200));
+        JScrollPane scroller = new JScrollPane(controlContentPane);
+        scroller.setPreferredSize(new Dimension(500, 400));
         
-        frame.setContentPane(scroller);
+        controlframe.setContentPane(scroller);
  
         //Display the window.
-        frame.pack();
-        frame.setVisible(true);
+        controlframe.pack();
+        controlframe.setVisible(true);
        
         
 //        JPanel panel = new JPanel();
@@ -91,7 +91,8 @@ public class App
         
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            graphForm.setVisible(true);
+//            graphForm.setVisible(true);
+            controlframe.setVisible(true);
         });
     }
     

@@ -609,23 +609,23 @@ public class GraphDatabaseForm extends javax.swing.JFrame
     
     private void updateNodePropertyValues(String nodeType, String nodeID)
     {
-        String[] props = getPropertyTypesfromID(nodeID);    
-        String[] currentVals = new String[props.length];
-        
-        for(int j = 0; j<props.length; j++)
-        {
-            currentVals[j] = getNodePropertyValue(props[j], nodeID)[0];
-        }
-        
-        PropertyDialog p = new PropertyDialog(this, true, "Node",nodeType, props, currentVals); 
-        String[] newVals = p.showDialog();
-       
-        for (int i = 0; i<props.length; i++)
-        {
-            updateNodePropertyValue(nodeID, props[i], newVals[i]);
-        }   
-        
-        jTextPane1.setText(jTextPane1.getText()+"\n Updated "+props.length+" node properties.");
+//        String[] props = getPropertyTypesfromID(nodeID);    
+//        String[] currentVals = new String[props.length];
+//        
+//        for(int j = 0; j<props.length; j++)
+//        {
+//            currentVals[j] = getNodePropertyValue(props[j], nodeID)[0];
+//        }
+//        
+//        PropertyDialog p = new PropertyDialog(this, true, "Node",nodeType, props, currentVals); 
+//        String[] newVals = p.showDialog();
+//       
+//        for (int i = 0; i<props.length; i++)
+//        {
+//            updateNodePropertyValue(nodeID, props[i], newVals[i]);
+//        }   
+//        
+//        jTextPane1.setText(jTextPane1.getText()+"\n Updated "+props.length+" node properties.");
     }
     
     /**
@@ -2028,20 +2028,20 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ButtonAddAllProperties1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddAllProperties1ActionPerformed
-        String nodeType =  ComboBoxType1.getSelectedItem().toString();
-        String[] props = nodeProperties.get(nodeType);
-        String[] currentVals = new String[props.length];
-        PropertyDialog p = new PropertyDialog(this, true, "Node",nodeType, props, currentVals);
-        String[] vals = p.showDialog();
-
-        createNodePropertyList.clear();
-
-        for (int i = 0; i<props.length; i++)
-        {
-            String[] s = {props[i],vals[i]};
-            createNodePropertyList.add(s);
-        }
-        jTextPane1.setText(jTextPane1.getText()+"\n Added "+props.length+" new node properties.");
+//        String nodeType =  ComboBoxType1.getSelectedItem().toString();
+//        String[] props = nodeProperties.get(nodeType);
+//        String[] currentVals = new String[props.length];
+//        PropertyDialog p = new PropertyDialog(this, true, "Node",nodeType, props, currentVals);
+//        String[] vals = p.showDialog();
+//
+//        createNodePropertyList.clear();
+//
+//        for (int i = 0; i<props.length; i++)
+//        {
+//            String[] s = {props[i],vals[i]};
+//            createNodePropertyList.add(s);
+//        }
+//        jTextPane1.setText(jTextPane1.getText()+"\n Added "+props.length+" new node properties.");
     }//GEN-LAST:event_ButtonAddAllProperties1ActionPerformed
 
     /**
@@ -2303,21 +2303,21 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      * @param evt 
      */
     private void ButtonAddAllProperties2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonAddAllProperties2ActionPerformed
-        String relType =  ComboBoxRelationship2.getSelectedItem().toString();
-        String[] props = relationshipProperties.get(relType);
-        String[] currentVals = new String[props.length];
-        PropertyDialog p = new PropertyDialog(this, true, "Relationship",relType, props, currentVals);
-        String[] vals = p.showDialog();
-
-        createRelationshipPropertyList.clear();
-
-        for (int i = 0; i<props.length; i++)
-        {
-            String[] s = {props[i],vals[i]};
-            createRelationshipPropertyList.add(s);
-        }
-
-        jTextPane1.setText(jTextPane1.getText()+"\n Added "+props.length+" new relationship properties.");
+//        String relType =  ComboBoxRelationship2.getSelectedItem().toString();
+//        String[] props = relationshipProperties.get(relType);
+//        String[] currentVals = new String[props.length];
+//        PropertyDialog p = new PropertyDialog(this, true, "Relationship",relType, props, currentVals);
+//        String[] vals = p.showDialog();
+//
+//        createRelationshipPropertyList.clear();
+//
+//        for (int i = 0; i<props.length; i++)
+//        {
+//            String[] s = {props[i],vals[i]};
+//            createRelationshipPropertyList.add(s);
+//        }
+//
+//        jTextPane1.setText(jTextPane1.getText()+"\n Added "+props.length+" new relationship properties.");
     }//GEN-LAST:event_ButtonAddAllProperties2ActionPerformed
 
     /**
@@ -2395,26 +2395,26 @@ public class GraphDatabaseForm extends javax.swing.JFrame
      */
     private void ButtonEditProperties2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonEditProperties2ActionPerformed
 
-        String node1ID =  ComboBoxID1.getSelectedItem().toString();
-        String node2ID = ComboBoxID2.getSelectedItem().toString();
-        String relType = ComboBoxRelationship1.getSelectedItem().toString();
-        String[] props = getRelationshipProperties(relType);
-        String[] currentVals = new String[props.length];
-
-        for(int j = 0; j<props.length; j++)
-        {
-            currentVals[j] = getRelationshipPropertyValue(node1ID, node2ID, relType, props[j])[0];
-        }
-
-        PropertyDialog p = new PropertyDialog(this, true, "Relationship",relType, props, currentVals);
-        String[] newVals = p.showDialog();
-
-        for (int i = 0; i<props.length; i++)
-        {
-            updateRelationshipPropertyValue(node1ID,node2ID,relType, props[i], newVals[i]);
-        }
-
-        jTextPane1.setText(jTextPane1.getText()+"\n Updated "+props.length+" relationship properties.");
+//        String node1ID =  ComboBoxID1.getSelectedItem().toString();
+//        String node2ID = ComboBoxID2.getSelectedItem().toString();
+//        String relType = ComboBoxRelationship1.getSelectedItem().toString();
+//        String[] props = getRelationshipProperties(relType);
+//        String[] currentVals = new String[props.length];
+//
+//        for(int j = 0; j<props.length; j++)
+//        {
+//            currentVals[j] = getRelationshipPropertyValue(node1ID, node2ID, relType, props[j])[0];
+//        }
+//
+//        PropertyDialog p = new PropertyDialog(this, true, "Relationship",relType, props, currentVals);
+//        String[] newVals = p.showDialog();
+//
+//        for (int i = 0; i<props.length; i++)
+//        {
+//            updateRelationshipPropertyValue(node1ID,node2ID,relType, props[i], newVals[i]);
+//        }
+//
+//        jTextPane1.setText(jTextPane1.getText()+"\n Updated "+props.length+" relationship properties.");
     }//GEN-LAST:event_ButtonEditProperties2ActionPerformed
 
     /**

@@ -5,16 +5,41 @@
  */
 package net.prgarnett.notedatabase;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JFrame;
+import org.neo4j.driver.v1.Driver;
+import org.neo4j.driver.v1.Session;
+import org.neo4j.driver.v1.StatementResult;
+
 /**
  *
  * @author philipgarnett
  */
-public class NewNotePanel extends javax.swing.JPanel {
-
+public class NewNotePanel extends javax.swing.JPanel 
+{
+    private final DateFormat dateFormat;
+    private final Date date;
+    private final Driver driver;
+    private final Session session;
+    private final JFrame thisFrame;
+    private List<String> keywords;
+    private List<String> associations;
+    
     /**
      * Creates new form NewNotePanel
+     * @param driver
      */
-    public NewNotePanel() {
+    public NewNotePanel(Driver driver, JFrame thisFrame) 
+    {
+        this.driver = driver;
+        this.thisFrame = thisFrame;
+        this.session = driver.session();
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        date = new Date();
         initComponents();
     }
 
@@ -28,36 +53,114 @@ public class NewNotePanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        notesText = new javax.swing.JTextArea();
+        createButton = new javax.swing.JButton();
+        keywordsButton = new javax.swing.JButton();
+        titleField = new javax.swing.JTextField();
+        noteTitleLabel = new javax.swing.JLabel();
+        linkNotesButton = new javax.swing.JButton();
+        panelTitle = new javax.swing.JLabel();
+        dateLabel = new javax.swing.JLabel();
+        dateField = new javax.swing.JTextField();
+        typeLabel = new javax.swing.JLabel();
+        typeTextField = new javax.swing.JTextField();
 
         setAutoscrolls(true);
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        notesText.setColumns(20);
+        notesText.setRows(5);
+        jScrollPane1.setViewportView(notesText);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 410, 120));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 550, 240));
 
-        jButton1.setText("jButton1");
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 350, -1, -1));
+        createButton.setText("Create");
+        createButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createButtonActionPerformed(evt);
+            }
+        });
+        add(createButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 360, -1, -1));
 
-        jButton2.setText("jButton2");
-        add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 350, -1, -1));
+        keywordsButton.setText("Keywords");
+        keywordsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                keywordsButtonActionPerformed(evt);
+            }
+        });
+        add(keywordsButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, -1, -1));
+        add(titleField, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 60, 150, -1));
 
-        jTextField1.setText("jTextField1");
-        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
+        noteTitleLabel.setText("Note Title:");
+        add(noteTitleLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, 30));
+
+        linkNotesButton.setLabel("Link Notes");
+        linkNotesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                linkNotesButtonActionPerformed(evt);
+            }
+        });
+        add(linkNotesButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 360, -1, -1));
+
+        panelTitle.setText("Creat a New Note");
+        add(panelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
+
+        dateLabel.setText("Date:");
+        add(dateLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
+
+        dateField.setText(dateFormat.format(date));
+        dateField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dateFieldActionPerformed(evt);
+            }
+        });
+        add(dateField, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, 150, -1));
+
+        typeLabel.setText("Node Type");
+        add(typeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, 20));
+        add(typeTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 150, -1));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void keywordsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_keywordsButtonActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_keywordsButtonActionPerformed
+
+    private void dateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dateFieldActionPerformed
+
+    private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
+        // TODO add your handling code here:
+        String propertyList = "Title: '" + titleField.getText() + "'" 
+                + ",Date: '" + dateField.getText() + "'"
+                + ",Content: '" + notesText.getText() + "'";
+
+        StatementResult result = session.run( "create (newNode:"+ typeTextField.getText() + "{" + propertyList + "})");
+        
+//        System.out.println("Something should have happened");
+        session.close();
+        this.thisFrame.dispose();
+    }//GEN-LAST:event_createButtonActionPerformed
+
+    private void linkNotesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkNotesButtonActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_linkNotesButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton createButton;
+    private javax.swing.JTextField dateField;
+    private javax.swing.JLabel dateLabel;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton keywordsButton;
+    private javax.swing.JButton linkNotesButton;
+    private javax.swing.JLabel noteTitleLabel;
+    private javax.swing.JTextArea notesText;
+    private javax.swing.JLabel panelTitle;
+    private javax.swing.JTextField titleField;
+    private javax.swing.JLabel typeLabel;
+    private javax.swing.JTextField typeTextField;
     // End of variables declaration//GEN-END:variables
 }
