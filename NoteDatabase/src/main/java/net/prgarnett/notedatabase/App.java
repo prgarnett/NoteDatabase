@@ -28,22 +28,10 @@ public class App
     private final Driver driver;
     private final Session session;   
     
-    App(String pathname)
+    public App()
     {
-        String database = "";
-        String password = "";
-        
-        try
-        {
-            File auth = new File(pathname);
-            Scanner lineScan = new Scanner(auth);
-            database = lineScan.nextLine();
-            password = lineScan.nextLine();
-        }
-        catch (FileNotFoundException e)
-        {
-            System.err.println("Auth File not present: " + e.getMessage());
-        }
+        String database = "notesdatabase";
+        String password = "b.cjom7OnBzTRF.zsYbhJxHC5DYdRO1";
         
         driver = GraphDatabase.driver( "bolt://sb11.stations.graphenedb.com:24786", AuthTokens.basic( database, password ));
         session = driver.session();
@@ -51,49 +39,18 @@ public class App
         registerShutdownHook(session, driver);
     }
     
+    public void startApp()
+    {
+        ControlPanel control = new ControlPanel(this.getDriver());
+        control.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        control.setVisible(true);
+    }
+    
+    
     public static void main(String args[])
     {
-        App noteDatabase = new App(args[0]);
-//        
-//        GraphDatabaseForm graphForm = new GraphDatabaseForm(noteDatabase.getDriver(), noteDatabase.getSession());
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GraphDatabaseForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        
-        JFrame controlframe = new JFrame("Control Panel");
-        controlframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        JComponent controlContentPane = new ControlPanel(noteDatabase.getDriver());
-        controlContentPane.setOpaque(true); //content panes must be opaque
-        
-        JScrollPane scroller = new JScrollPane(controlContentPane);
-        scroller.setPreferredSize(new Dimension(500, 400));
-        
-        controlframe.setContentPane(scroller);
- 
-        //Display the window.
-        controlframe.pack();
-        controlframe.setVisible(true);
-       
-        
-//        JPanel panel = new JPanel();
-//        Container c = graphForm.getContentPane();
-//
-//        JScrollPane jsp = new JScrollPane(panel);
-//        c.add(jsp);
-        
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-//            graphForm.setVisible(true);
-            controlframe.setVisible(true);
-        });
+        App noteDatabase = new App();
+        noteDatabase.startApp();
     }
     
     private static void registerShutdownHook( final Session session, final Driver driver )
